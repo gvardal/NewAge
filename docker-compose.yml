@@ -1,0 +1,39 @@
+version: '3.4'
+
+name: newage
+
+services:
+  meetup:
+    container_name: meetup
+    image: ${DOCKER_REGISTRY-}meetup
+    build:
+      context: .
+      dockerfile: UserInterfaces/MeetUP/MeetUP/Dockerfile
+    ports:
+      - "7001:80"
+  
+  authenticationwebapi:
+    container_name: authentication-api
+    image: ${DOCKER_REGISTRY-}authenticationwebapi
+    build:
+      context: .
+      dockerfile: UserManagement/AuthenticationWebApi/Dockerfile
+    ports:
+      - "5002:80"
+  
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+  
+  consul:
+    container_name: consul
+    image: consul
+    ports:
+      - 8500:8500
+      - 8600:8600/tcp
+      - 8600:8600/udp
+
+    
