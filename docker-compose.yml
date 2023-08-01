@@ -36,4 +36,13 @@ services:
       - 8600:8600/tcp
       - 8600:8600/udp
 
+  sqlserver:
+    container_name: sqlserver
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - 5003:1433
+    environment:
+      SA_PASSWORD: "Gv973041*"
+      ACCEPT_EULA: "Y"
+
     
