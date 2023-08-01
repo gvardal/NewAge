@@ -6,10 +6,10 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["UserInterfaces/MeetUP/MeetUP/MeetUP.csproj", "UserInterfaces/MeetUP/MeetUP/"]
-RUN dotnet restore "UserInterfaces/MeetUP/MeetUP/MeetUP.csproj"
+COPY ["UserInterfaces/MeetUP/MeetUP.csproj", "UserInterfaces/MeetUP/"]
+RUN dotnet restore "UserInterfaces/MeetUP/MeetUP.csproj"
 COPY . .
-WORKDIR "/src/UserInterfaces/MeetUP/MeetUP"
+WORKDIR "/src/UserInterfaces/MeetUP"
 RUN dotnet build "MeetUP.csproj" -c Release -o /app/build
 
 FROM build AS publish

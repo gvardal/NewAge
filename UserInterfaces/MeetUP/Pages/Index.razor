@@ -1,0 +1,119 @@
+﻿@page "/"
+@using System.Globalization;
+@using MeetUP.DataTransferObjects;
+@using Microsoft.AspNetCore.Http.Extensions;
+@using Syncfusion.Blazor.Buttons;
+@using Syncfusion.Blazor.Data;
+@using Syncfusion.Blazor.DropDowns;
+@using Syncfusion.Blazor.Inputs;
+@using System.Timers;
+
+
+
+<div class="overview-scheduler">
+    <SfSchedule TValue="AppointmentData" Height="calc(100vh - 100px)" Width="100%" FirstDayOfWeek="1" ShowWeekend=false
+    @bind-SelectedDate="@CurrentDate" StartHour="@scheduleStartHour" EndHour="@scheduleEndHour" ShowTimeIndicator>
+        <ScheduleWorkHours Highlight="true" Start="@scheduleStartHour" End="@scheduleEndHour"></ScheduleWorkHours>
+        <ScheduleEvents TValue="AppointmentData" OnPopupOpen="@OnPopupOpen"></ScheduleEvents>
+        <ScheduleEventSettings DataSource="@DataSource"></ScheduleEventSettings>
+        <ScheduleViews>
+            <ScheduleView Option="View.WorkWeek"></ScheduleView>
+            <ScheduleView Option="View.Month"></ScheduleView>
+            <ScheduleView Option="View.Agenda"></ScheduleView>
+        </ScheduleViews>
+        <ScheduleTemplates>
+            <EditorTemplate>
+                @{
+                    var Data = (context as AppointmentData);
+                    <table class="custom-event-editor" width="100%" cellpadding="5">
+                        <tbody>
+                            <tr>
+                                <td class="e-textlabel">Subject</td>
+                                <td><SfTextBox @bind-Value="@(Data.Subject)"></SfTextBox></td>
+                            </tr>
+                            <tr>
+                                <td>Start Time</td>
+                                <td><SfDateTimePicker @bind-Value="@(Data.StartTime)"></SfDateTimePicker></td>
+                            </tr>
+                            <tr>
+                                <td>Finish Time</td>
+                                <td><SfDateTimePicker @bind-Value="@(Data.EndTime)"></SfDateTimePicker></td>
+                            </tr>
+                            <tr>
+                                <td>Status</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+            </EditorTemplate>
+        </ScheduleTemplates>
+    </SfSchedule>
+</div>
+
+<style>
+    .custom-event-editor td {
+        padding: 7px;
+        padding-right: 16px;
+    }
+
+    .dropdown .e-dropdownlist {
+        color: inherit !important;
+    }
+</style>
+
+@code {
+
+    private string scheduleStartHour = "08:00";
+    private string scheduleEndHour = "18:00";
+
+    public class AppointmentData
+    {
+        public int Id { get; set; }
+        public string Subject { get; set; }
+        public string Location { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public string Description { get; set; }
+        public bool IsAllDay { get; set; }
+        public string RecurrenceRule { get; set; }
+        public string RecurrenceException { get; set; }
+        public Nullable<int> RecurrenceID { get; set; }
+    }
+
+    DateTime CurrentDate = new DateTime(2020, 1, 31);
+    List<AppointmentData> DataSource = new List<AppointmentData>
+    {
+        new AppointmentData 
+        { 
+            Id = 1, 
+            Subject = "Meeting-1", 
+            StartTime = new DateTime(2020, 1, 31, 9, 30, 0) , 
+            EndTime = new DateTime(2020, 1, 31, 11, 0, 0) 
+        },
+        new AppointmentData
+        {
+            Id = 2,
+            Subject = "Meeting-2",
+            StartTime = new DateTime(2020, 1, 30, 11, 30, 0) ,
+            EndTime = new DateTime(2020, 1, 30, 14, 0, 0)
+        },
+    };
+
+    public void OnPopupOpen(PopupOpenEventArgs<AppointmentData> args)
+    {
+        if (args.Type == PopupType.QuickInfo)
+        {
+            args.Cancel = true;
+        }
+
+        // if appoinment is confirmed and user is not admin user
+        // if args.Type == PopupType.Editor => args.Calcel = true;
+    }
+
+
+
+}
+
+
+
