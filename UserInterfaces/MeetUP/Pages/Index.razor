@@ -11,10 +11,11 @@
 
 
 <div class="overview-scheduler">
-    <SfSchedule TValue="AppointmentData" Height="calc(100vh - 100px)" Width="100%" FirstDayOfWeek="1" ShowWeekend=false
-    @bind-SelectedDate="@CurrentDate" StartHour="@scheduleStartHour" EndHour="@scheduleEndHour" ShowTimeIndicator>
+    <SfSchedule TValue="AppointmentDataDto" @ref="ScheduleRef" Height="calc(100vh - 100px)" Width="100%" 
+        FirstDayOfWeek="1" ShowWeekend=false
+        @bind-SelectedDate="@CurrentDate" StartHour="@scheduleStartHour" EndHour="@scheduleEndHour" ShowTimeIndicator>
         <ScheduleWorkHours Highlight="true" Start="@scheduleStartHour" End="@scheduleEndHour"></ScheduleWorkHours>
-        <ScheduleEvents TValue="AppointmentData" OnPopupOpen="@OnPopupOpen"></ScheduleEvents>
+        <ScheduleEvents TValue="AppointmentDataDto" OnPopupOpen="@OnPopupOpen" OnCellDoubleClick="@DoubleClick" OnEventDoubleClick="@DoubleClick"></ScheduleEvents>
         <ScheduleEventSettings DataSource="@DataSource"></ScheduleEventSettings>
         <ScheduleViews>
             <ScheduleView Option="View.WorkWeek"></ScheduleView>
@@ -24,7 +25,7 @@
         <ScheduleTemplates>
             <EditorTemplate>
                 @{
-                    var Data = (context as AppointmentData);
+                    var Data = (context as AppointmentDataDto);
                     <table class="custom-event-editor" width="100%" cellpadding="5">
                         <tbody>
                             <tr>
@@ -40,14 +41,26 @@
                                 <td><SfDateTimePicker @bind-Value="@(Data.EndTime)"></SfDateTimePicker></td>
                             </tr>
                             <tr>
-                                <td>Status</td>
-                                <td></td>
+                                <td>Short Description</td>
+                                <td><SfTextBox @bind-Value="@(Data.ShortDescription)" Multiline></SfTextBox></td>
                             </tr>
                         </tbody>
                     </table>
                 }
             </EditorTemplate>
         </ScheduleTemplates>
+        <ScheduleResources>
+            <ScheduleResource TItem="ResourceData" TValue="int[]" DataSource="@OwnersData" Field="OwnerId" Title="Owner" Name="Owners" TextField="OwnerText" IdField="Id" ColorField="OwnerColor" AllowMultiple="true"></ScheduleResource>
+        </ScheduleResources>
+        <SfContextMenu TValue="MenuItem" Target=".e-schedule">
+            <MenuItems>
+                <MenuItem Text="New Event" Id="Add" Hidden="@isCell" IconCss="e-icons e-plus"></MenuItem>
+                <MenuItem Text="Quick Edit" Id="Save" Hidden="@isEvent" IconCss="e-icons e-edit"></MenuItem>
+                <MenuItem Text="Delete Event" Id="Delete" Hidden="@isEvent" IconCss="e-icons e-trash"></MenuItem>
+                <MenuItem Text="Event Details" Id="Details" Hidden="@isEvent"></MenuItem>
+            </MenuItems>
+            <MenuEvents TValue="MenuItem" OnOpen="OnOpen" ItemSelected="OnItemSelected"></MenuEvents>
+        </SfContextMenu>
     </SfSchedule>
 </div>
 
@@ -67,51 +80,137 @@
     private string scheduleStartHour = "08:00";
     private string scheduleEndHour = "18:00";
 
-    public class AppointmentData
-    {
-        public int Id { get; set; }
-        public string Subject { get; set; }
-        public string Location { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public string Description { get; set; }
-        public bool IsAllDay { get; set; }
-        public string RecurrenceRule { get; set; }
-        public string RecurrenceException { get; set; }
-        public Nullable<int> RecurrenceID { get; set; }
-    }
+    private bool isCell;
+    private bool isEvent;
+    private bool isDoubleClick { get; set; } = true;
+
+    SfSchedule<AppointmentDataDto>? ScheduleRef;
+    private CellClickEventArgs CellData { get; set; } = new();
+    private AppointmentDataDto EventData { get; set; } = new();
+    private ElementInfo<AppointmentDataDto> ElementData { get; set; } = new();
 
     DateTime CurrentDate = new DateTime(2020, 1, 31);
-    List<AppointmentData> DataSource = new List<AppointmentData>
+
+    public class ResourceData
     {
-        new AppointmentData 
+        public int Id { get; set; }
+        public string OwnerText { get; set; } = string.Empty;
+        public string OwnerColor { get; set; } = string.Empty;
+    }
+
+    List<ResourceData> OwnersData { get; set; } = new List<ResourceData>
+    {
+        new ResourceData{ OwnerText = "Nancy", Id = 1, OwnerColor = "#ffaa00" },
+        new ResourceData{ OwnerText = "Steven", Id = 2, OwnerColor = "#f8a398" },
+        new ResourceData{ OwnerText = "Michael", Id = 3, OwnerColor = "#7499e1" }
+    };
+
+    List<AppointmentDataDto> DataSource = new List<AppointmentDataDto>
+    {
+        new AppointmentDataDto
         { 
-            Id = 1, 
+            Id = new Guid("9fec203d-8dc6-4a88-bf62-62f43b17b5ad"),
             Subject = "Meeting-1", 
             StartTime = new DateTime(2020, 1, 31, 9, 30, 0) , 
-            EndTime = new DateTime(2020, 1, 31, 11, 0, 0) 
+            EndTime = new DateTime(2020, 1, 31, 11, 0, 0),
+            ShortDescription = "It is first meeting in our company, we discuss our project plan and milestones with priority.",
+            OwnerId = 1
         },
-        new AppointmentData
+        new AppointmentDataDto
         {
-            Id = 2,
+            Id = new Guid("0815bc1d-dcb1-43ec-8907-b678b5ff1aa1"),
             Subject = "Meeting-2",
             StartTime = new DateTime(2020, 1, 30, 11, 30, 0) ,
-            EndTime = new DateTime(2020, 1, 30, 14, 0, 0)
+            EndTime = new DateTime(2020, 1, 30, 14, 0, 0),
+            OwnerId = 3
         },
     };
 
-    public void OnPopupOpen(PopupOpenEventArgs<AppointmentData> args)
+    public void OnPopupOpen(PopupOpenEventArgs<AppointmentDataDto> args)
     {
         if (args.Type == PopupType.QuickInfo)
         {
             args.Cancel = true;
         }
 
-        // if appoinment is confirmed and user is not admin user
-        // if args.Type == PopupType.Editor => args.Calcel = true;
+        if (args.Type == PopupType.Editor && isDoubleClick)
+        {
+            args.Cancel = true;
+        }
+    }
+
+    public void DoubleClick() { isDoubleClick=true; }
+
+    public async Task OnOpen(BeforeOpenCloseMenuEventArgs<MenuItem> args)
+    {
+        if (args is not null)
+        {
+            if (args.ParentItem == null)
+            {
+                if (ScheduleRef is not null)
+                {
+                    CellData = await ScheduleRef.GetTargetCellAsync((int)args.Left!, (int)args.Top!);
+                    await ScheduleRef.CloseQuickInfoPopupAsync();
+                    if (CellData == null)
+                    {
+                        EventData = await ScheduleRef.GetTargetEventAsync((int)args.Left, (int)args.Top);
+                        if (EventData.Id == new Guid("00000000-0000-0000-0000-000000000000"))
+                        {
+                            args.Cancel = true;
+                        }
+
+                        isCell = true;
+                        isEvent = false;
+                    }
+                    else
+                    {
+                        isCell = false;
+                        isEvent = true;
+                    }
+                }
+            }
+        }
     }
 
 
+
+    public async Task OnItemSelected(MenuEventArgs<MenuItem> args)
+    {
+        if (ScheduleRef is not null)
+        {
+            var SelectedMenuItem = args.Item.Id;
+            var ActiveCellsData = await ScheduleRef.GetSelectedCellsAsync();
+            if (ActiveCellsData == null)
+            {
+                ActiveCellsData = CellData;
+            }
+            switch (SelectedMenuItem)
+            {
+                case "Add":
+                    isDoubleClick = false;
+                    await ScheduleRef.OpenEditorAsync(ActiveCellsData, CurrentAction.Add);
+                    break;
+                case "Save":
+                    isDoubleClick = false;
+                    await ScheduleRef.OpenEditorAsync(EventData, CurrentAction.Save); 
+                    break;
+                    //case "EditOccurrence":
+                    //    await ScheduleRef.OpenEditorAsync(EventData, CurrentAction.EditOccurrence);
+                    //    break;
+                    //case "EditSeries":
+                    //    List<AppointmentData> Events = await ScheduleRef.GetEventsAsync();
+                    //    EventData = (AppointmentData)Events.Where(data => data.Id == EventData.RecurrenceID).FirstOrDefault();
+                    //    await ScheduleRef.OpenEditorAsync(EventData, CurrentAction.EditSeries);
+                    //    break;
+                    case "Delete":
+                        isDoubleClick = false;
+                        await ScheduleRef.DeleteEventAsync(EventData);
+                        break;
+            }
+        }
+        
+
+    }
 
 }
 

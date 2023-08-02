@@ -2,7 +2,7 @@
 {
     public class AppointmentDataDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Subject { get; set; } = string.Empty;
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
@@ -10,7 +10,9 @@
         public string RecurrenceRule { get; set; } = string.Empty;
         public int? RecurrenceID { get; set; }
         public string RecurrenceException { get; set; } = string.Empty;
-        public string AppointmentStatus { get; set; }
+        public string AppointmentStatus { get; set; } = string.Empty;
         public string CssClass { get; set;} = string.Empty;
+        public string ShortDescription { get; set; } = string.Empty;
+        public int OwnerId { get; set; }
     }
 }
