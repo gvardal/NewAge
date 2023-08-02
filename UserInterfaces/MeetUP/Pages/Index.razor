@@ -1,19 +1,14 @@
 ﻿@page "/"
-@using System.Globalization;
-@using MeetUP.DataTransferObjects;
-@using Microsoft.AspNetCore.Http.Extensions;
-@using Syncfusion.Blazor.Buttons;
-@using Syncfusion.Blazor.Data;
-@using Syncfusion.Blazor.DropDowns;
-@using Syncfusion.Blazor.Inputs;
-@using System.Timers;
 
-
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Buttons
+@inject SfDialogService DialogService
+@inject NavigationManager navigationManager;
 
 <div class="overview-scheduler">
-    <SfSchedule TValue="AppointmentDataDto" @ref="ScheduleRef" Height="calc(100vh - 100px)" Width="100%" 
-        FirstDayOfWeek="1" ShowWeekend=false
-        @bind-SelectedDate="@CurrentDate" StartHour="@scheduleStartHour" EndHour="@scheduleEndHour" ShowTimeIndicator>
+    <SfSchedule TValue="AppointmentDataDto" @ref="ScheduleRef" Height="calc(100vh - 100px)" Width="100%"
+                FirstDayOfWeek="1" ShowWeekend=false
+    @bind-SelectedDate="@CurrentDate" StartHour="@scheduleStartHour" EndHour="@scheduleEndHour" ShowTimeIndicator>
         <ScheduleWorkHours Highlight="true" Start="@scheduleStartHour" End="@scheduleEndHour"></ScheduleWorkHours>
         <ScheduleEvents TValue="AppointmentDataDto" OnPopupOpen="@OnPopupOpen" OnCellDoubleClick="@DoubleClick" OnEventDoubleClick="@DoubleClick"></ScheduleEvents>
         <ScheduleEventSettings DataSource="@DataSource"></ScheduleEventSettings>
@@ -108,10 +103,10 @@
     List<AppointmentDataDto> DataSource = new List<AppointmentDataDto>
     {
         new AppointmentDataDto
-        { 
+        {
             Id = new Guid("9fec203d-8dc6-4a88-bf62-62f43b17b5ad"),
-            Subject = "Meeting-1", 
-            StartTime = new DateTime(2020, 1, 31, 9, 30, 0) , 
+            Subject = "Meeting-1",
+            StartTime = new DateTime(2020, 1, 31, 9, 30, 0) ,
             EndTime = new DateTime(2020, 1, 31, 11, 0, 0),
             ShortDescription = "It is first meeting in our company, we discuss our project plan and milestones with priority.",
             OwnerId = 1
@@ -139,7 +134,7 @@
         }
     }
 
-    public void DoubleClick() { isDoubleClick=true; }
+    public void DoubleClick() { isDoubleClick = true; }
 
     public async Task OnOpen(BeforeOpenCloseMenuEventArgs<MenuItem> args)
     {
@@ -172,8 +167,6 @@
         }
     }
 
-
-
     public async Task OnItemSelected(MenuEventArgs<MenuItem> args)
     {
         if (ScheduleRef is not null)
@@ -192,24 +185,17 @@
                     break;
                 case "Save":
                     isDoubleClick = false;
-                    await ScheduleRef.OpenEditorAsync(EventData, CurrentAction.Save); 
+                    await ScheduleRef.OpenEditorAsync(EventData, CurrentAction.Save);
                     break;
-                    //case "EditOccurrence":
-                    //    await ScheduleRef.OpenEditorAsync(EventData, CurrentAction.EditOccurrence);
-                    //    break;
-                    //case "EditSeries":
-                    //    List<AppointmentData> Events = await ScheduleRef.GetEventsAsync();
-                    //    EventData = (AppointmentData)Events.Where(data => data.Id == EventData.RecurrenceID).FirstOrDefault();
-                    //    await ScheduleRef.OpenEditorAsync(EventData, CurrentAction.EditSeries);
-                    //    break;
-                    case "Delete":
-                        isDoubleClick = false;
-                        await ScheduleRef.DeleteEventAsync(EventData);
-                        break;
+                case "Details":
+                    navigationManager.NavigateTo($"details/{EventData.Id}");
+                    break;
+                case "Delete":
+                    isDoubleClick = false;
+                    await ScheduleRef.DeleteEventAsync(EventData);
+                    break;
             }
         }
-        
-
     }
 
 }

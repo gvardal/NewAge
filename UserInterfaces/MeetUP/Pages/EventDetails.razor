@@ -1,0 +1,8 @@
+﻿@page "/details/{Id:guid}"
+
+<h3>Event Details For @Id.ToString()</h3>
+
+@code {
+    [Parameter]
+    public Guid? Id { get; set; }
+}
