@@ -16,6 +16,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\files\" />
     <Folder Include="wwwroot\files\9fec203d-8dc6-4a88-bf62-62f43b17b5ad\" />
+    <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
 </Project>

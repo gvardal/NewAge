@@ -2,10 +2,7 @@
 @page "/details/{Id:guid}"
 @using System.Collections.ObjectModel;
 @using System.ComponentModel;
-
 @inject NavigationManager navigationManager
-
-
 
 <div>
     <div class="row">
@@ -14,13 +11,25 @@
                 <CardHeader Title="Appointment Details" />
                 <CardContent>
                     <EditForm Model="@appointment">
-                        <div class="col-md-6 mb-3">
-                            <label for="Name">Subject</label>
-                            <InputText id="Name" @bind-Value="appointment.Subject" class="form-control" />
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label>Subject</label>
+                                <SfTextBox Placeholder='Subject' Readonly @bind-Value="appointment.Subject"></SfTextBox>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>Start Date/Time</label>
+                                <SfDateTimePicker @bind-Value="appointment.StartTime" Readonly="false" ></SfDateTimePicker>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>End Date/Time</label>
+                                <SfDateTimePicker @bind-Value="appointment.EndTime" Readonly="false" ></SfDateTimePicker>
+                            </div>
                         </div>
-                        <div class="col-md-12 mb-3">
-                            <label for="Name">Short Description</label>
-                            <SfTextBox @bind-Value="appointment.ShortDescription" Multiline></SfTextBox>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="Name">Short Description</label>
+                                <SfTextBox @bind-Value="appointment.ShortDescription" Multiline CssClass="description"></SfTextBox>
+                            </div>
                         </div>
                     </EditForm>
                 </CardContent>
@@ -43,7 +52,8 @@
             <SfCard>
                 <CardHeader Title="Attachments" />
                 <CardContent>
-                    <SfGrid DataSource="@attachments">
+                    <SfGrid DataSource="@attachments" AllowSelection="false" AllowPaging="true">
+                        <GridPageSettings PageSize="5"></GridPageSettings>
                         <GridEvents CommandClicked="OnCommandClicked" TValue="Attachment"> </GridEvents>
                         <GridColumns>
                             <GridColumn Field="@(nameof(Attachment.FileName))" HeaderText="File Name" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left"></GridColumn>
@@ -58,6 +68,7 @@
                                 </GridCommandColumns>
                             </GridColumn>
                         </GridColumns>
+
                     </SfGrid>
                 </CardContent>
                 <CardFooter>
@@ -93,6 +104,7 @@
         font-weight: bold;
         color: cornflowerblue;
     }
+
 </style>
 
 @code
@@ -146,7 +158,7 @@
 
     public Attachment? RowDetails { get; set; }
 
-    public void OnCommandClicked(CommandClickEventArgs<Attachment> args)
+    public async Task OnCommandClicked(CommandClickEventArgs<Attachment> args)
     {
         if (args.CommandColumn.ID == "Download")
         {
