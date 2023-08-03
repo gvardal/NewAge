@@ -14,10 +14,10 @@ namespace MeetUP
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
             builder.Services.AddSingleton<WeatherForecastService>();
-            builder.Services.AddScoped<SfDialogService>();
+            
 
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NGaF5cXmRCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdgWXhfcHRWR2ZfUEJ0Vko=");
-            
+            builder.Services.AddScoped<SfDialogService>();
             builder.Services.AddSyncfusionBlazor();
 
             var app = builder.Build();

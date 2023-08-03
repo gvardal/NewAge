@@ -49,10 +49,11 @@
         </ScheduleResources>
         <SfContextMenu TValue="MenuItem" Target=".e-schedule">
             <MenuItems>
-                <MenuItem Text="New Event" Id="Add" Hidden="@isCell" IconCss="e-icons e-plus"></MenuItem>
+                <MenuItem Text="New Event" Id="Add" Hidden="@isCell" IconCss="e-icons e-circle-add"></MenuItem>
                 <MenuItem Text="Quick Edit" Id="Save" Hidden="@isEvent" IconCss="e-icons e-edit"></MenuItem>
                 <MenuItem Text="Delete Event" Id="Delete" Hidden="@isEvent" IconCss="e-icons e-trash"></MenuItem>
-                <MenuItem Text="Event Details" Id="Details" Hidden="@isEvent"></MenuItem>
+                <MenuItem Text="Confirm Event" Id="Confirm" Hidden="@isEvent" IconCss="e-icons e-people"></MenuItem>
+                <MenuItem Text="Event Details" Id="Details" Hidden="@isEvent" IconCss="e-icons e-more-horizontal-1"></MenuItem>
             </MenuItems>
             <MenuEvents TValue="MenuItem" OnOpen="OnOpen" ItemSelected="OnItemSelected"></MenuEvents>
         </SfContextMenu>

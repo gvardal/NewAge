@@ -1,8 +1,243 @@
-﻿@page "/details/{Id:guid}"
+﻿@page "/details"
+@page "/details/{Id:guid}"
+@using System.Collections.ObjectModel;
+@using System.ComponentModel;
 
-<h3>Event Details For @Id.ToString()</h3>
+@inject NavigationManager navigationManager
 
-@code {
+
+
+<div>
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <SfCard>
+                <CardHeader Title="Appointment Details" />
+                <CardContent>
+                    <EditForm Model="@appointment">
+                        <div class="col-md-6 mb-3">
+                            <label for="Name">Subject</label>
+                            <InputText id="Name" @bind-Value="appointment.Subject" class="form-control" />
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="Name">Short Description</label>
+                            <SfTextBox @bind-Value="appointment.ShortDescription" Multiline></SfTextBox>
+                        </div>
+                    </EditForm>
+                </CardContent>
+            </SfCard>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <SfCard>
+                <CardHeader Title="Appointment Details" />
+                <CardContent>
+                    <div>
+                        <label>Subject</label>
+
+                    </div>
+                </CardContent>
+            </SfCard>
+        </div>
+    </div>
+    <div class="row py-4">
+        <div class="col-sm-12 col-md-6">
+            <SfCard>
+                <CardHeader Title="Attachments" />
+                <CardContent>
+                    <SfGrid DataSource="@attachments">
+                        <GridEvents CommandClicked="OnCommandClicked" TValue="Attachment"> </GridEvents>
+                        <GridColumns>
+                            <GridColumn Field="@(nameof(Attachment.FileName))" HeaderText="File Name" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left"></GridColumn>
+                            <GridColumn TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="50">
+                                <GridCommandColumns>
+                                    <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { IconCss="e-icons e-download" , CssClass="m-0"})" ID="Download"></GridCommandColumn>
+                                </GridCommandColumns>
+                            </GridColumn>
+                            <GridColumn TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="50">
+                                <GridCommandColumns>
+                                    <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { IconCss="e-icons e-trash", CssClass="m-0" })" ID="Delete"></GridCommandColumn>
+                                </GridCommandColumns>
+                            </GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                </CardContent>
+                <CardFooter>
+                    <CardFooterContent>
+                        <SfUploader DirectoryUpload="false" MaxFileSize="@maxFileSize" AutoUpload="true" ShowFileList="true" ShowProgressBar>
+                            <UploaderEvents ValueChange="@OnChange" OnRemove="@onRemove"></UploaderEvents>
+                        </SfUploader>
+                    </CardFooterContent>
+                </CardFooter>
+            </SfCard>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <SfCard>
+                <CardHeader Title="Appointment Details" />
+                <CardContent>
+                    <div>
+                        <label>Subject</label>
+
+                    </div>
+                </CardContent>
+            </SfCard>
+        </div>
+    </div>
+</div>
+
+<style>
+    .e-upload .e-upload-files .e-upload-file-list {
+        background-color: aliceblue;
+    }
+
+    .e-card .e-card-header .e-card-header-caption .e-card-header-title {
+        font-size: large;
+        font-weight: bold;
+        color: cornflowerblue;
+    }
+</style>
+
+@code
+{
     [Parameter]
     public Guid? Id { get; set; }
+
+    private AppointmentDataDto appointment { get; set; } = new();
+    private string[]? fileNames { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (Id is null)
+        {
+            navigationManager.NavigateTo("/");
+        }
+        if (Id is not null)
+        {
+            var result = DataSource.Where(x => x.Id.Equals(Id)).FirstOrDefault();
+            if (result is not null)
+            {
+                appointment = result;
+                GetAttachments();
+            }
+        }
+    }
+
+    public class Attachment
+    {
+        public string? FileName { get; set; }
+    }
+
+    private ObservableCollection<Attachment> attachments = new();
+
+    private void GetAttachments()
+    {
+        fileNames = null;
+        attachments.Clear();
+        if (Directory.Exists(Path.Combine("wwwroot\\files\\", Id.ToString()!)))
+        {
+            fileNames = Directory.GetFiles(Path.Combine("wwwroot\\files\\", Id.ToString()!));
+            if (fileNames.Count() > 0)
+            {
+                foreach (var fileName in fileNames)
+                {
+                    attachments.Add(new Attachment { FileName = fileName.ToString().Replace($"wwwroot\\files\\{Id.ToString()}\\", null) });
+                }
+            }
+        }
+    }
+
+    public Attachment? RowDetails { get; set; }
+
+    public void OnCommandClicked(CommandClickEventArgs<Attachment> args)
+    {
+        if (args.CommandColumn.ID == "Download")
+        {
+
+        }
+        if (args.CommandColumn.ID == "Delete")
+        {
+            if (args.RowData.FileName is not null)
+            {
+                Directory.CreateDirectory(Path.Combine("wwwroot\\files", Id.ToString()!));
+                string path = Path.Combine("wwwroot\\files\\", $"{Id.ToString()}/", args.RowData.FileName);
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                    attachments.Remove(attachments.First(x => x.FileName!.Equals(args.RowData.FileName)));
+                }
+            }
+        }
+        RowDetails = args.RowData;
+    }
+
+    public List<AppointmentDataDto> DataSource = new List<AppointmentDataDto>
+    {
+        new AppointmentDataDto
+        {
+            Id = new Guid("9fec203d-8dc6-4a88-bf62-62f43b17b5ad"),
+            Subject = "Meeting-1",
+            StartTime = new DateTime(2020, 1, 31, 9, 30, 0) ,
+            EndTime = new DateTime(2020, 1, 31, 11, 0, 0),
+            ShortDescription = "It is first meeting in our company, we discuss our project plan and milestones with priority.",
+            OwnerId = 1
+        },
+        new AppointmentDataDto
+        {
+            Id = new Guid("0815bc1d-dcb1-43ec-8907-b678b5ff1aa1"),
+            Subject = "Meeting-2",
+            StartTime = new DateTime(2020, 1, 30, 11, 30, 0) ,
+            EndTime = new DateTime(2020, 1, 30, 14, 0, 0),
+            OwnerId = 3
+        },
+    };
+
+    private long maxFileSize = 3 * 1024 * 1024; // Max File size 3MB
+    private int maxAllowedFiles = 3;
+    private List<string> errors = new();
+
+    private async Task OnChange(UploadChangeEventArgs args)
+    {
+        errors.Clear();
+        if (args.Files.Count > maxAllowedFiles)
+        {
+            errors.Add($"Error: Attempting to upload {args.Files.Count} files, but only {maxAllowedFiles} files are allowed");
+            return;
+        }
+
+        foreach (var file in args.Files)
+        {
+            if (!string.IsNullOrEmpty(Id.ToString()))
+            {
+                try
+                {
+                    Directory.CreateDirectory(Path.Combine("wwwroot\\files", Id.ToString()!));
+                    string path = Path.Combine("wwwroot\\files\\", $"{Id.ToString()}/", file.FileInfo.Name);
+                    FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
+                    await file.File.OpenReadStream(maxFileSize).CopyToAsync(filestream);
+                    filestream.Close();
+                    attachments.Add(new Attachment { FileName = file.FileInfo.Name });
+                }
+                catch (Exception ex)
+                {
+                    errors.Add($"Error: {ex.Message}");
+                }
+            }
+        }
+    }
+
+    private void onRemove(RemovingEventArgs args)
+    {
+        foreach (var removeFile in args.FilesData)
+        {
+            Directory.CreateDirectory(Path.Combine("wwwroot\\files", Id.ToString()!));
+            string path = Path.Combine("wwwroot\\files\\", $"{Id.ToString()}/", removeFile.Name);
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+                attachments.Remove(attachments.First(x => x.FileName!.Equals(removeFile.Name)));
+            }
+        }
+    }
+
+
+
+
 }

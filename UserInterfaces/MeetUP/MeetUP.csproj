@@ -13,4 +13,9 @@
     <PackageReference Include="Syncfusion.Blazor" Version="22.2.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\files\" />
+    <Folder Include="wwwroot\files\9fec203d-8dc6-4a88-bf62-62f43b17b5ad\" />
+  </ItemGroup>
+
 </Project>
