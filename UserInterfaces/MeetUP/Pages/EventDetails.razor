@@ -3,6 +3,7 @@
 @using System.Collections.ObjectModel;
 @using System.ComponentModel;
 @inject NavigationManager navigationManager
+@inject SfDialogService DialogService
 
 <div>
     <div class="row">
@@ -29,6 +30,12 @@
                             <div class="col-md-12 mb-3">
                                 <label for="Name">Short Description</label>
                                 <SfTextBox @bind-Value="appointment.ShortDescription" Multiline CssClass="description"></SfTextBox>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <SfButton @onclick="@AlertBtn">Update Event</SfButton>
+                                <div class="status" style="padding-top:10px">@DialogStatus</div>
                             </div>
                         </div>
                     </EditForm>
@@ -115,6 +122,13 @@
     private AppointmentDataDto appointment { get; set; } = new();
     private string[]? fileNames { get; set; }
 
+    private string DialogStatus { get; set; }
+    private async Task AlertBtn()
+    {
+        await DialogService.AlertAsync("10% of battery remaining", "Low Battery");
+        this.DialogStatus = "The user closed the Alert dialog";
+    }
+
     protected override void OnInitialized()
     {
         if (Id is null)
@@ -166,18 +180,21 @@
         }
         if (args.CommandColumn.ID == "Delete")
         {
-            if (args.RowData.FileName is not null)
+            bool isConfirm = await DialogService.ConfirmAsync("Are you sure you want to permanently delete these item?", "Delete Attachment");
+            if (isConfirm)
             {
-                Directory.CreateDirectory(Path.Combine("wwwroot\\files", Id.ToString()!));
-                string path = Path.Combine("wwwroot\\files\\", $"{Id.ToString()}/", args.RowData.FileName);
-                if (File.Exists(path))
+                if (args.RowData.FileName is not null)
                 {
-                    File.Delete(path);
-                    attachments.Remove(attachments.First(x => x.FileName!.Equals(args.RowData.FileName)));
+                    Directory.CreateDirectory(Path.Combine("wwwroot\\files", Id.ToString()!));
+                    string path = Path.Combine("wwwroot\\files\\", $"{Id.ToString()}/", args.RowData.FileName);
+                    if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                        attachments.Remove(attachments.First(x => x.FileName!.Equals(args.RowData.FileName)));
+                    }
                 }
             }
         }
-        RowDetails = args.RowData;
     }
 
     public List<AppointmentDataDto> DataSource = new List<AppointmentDataDto>
@@ -235,16 +252,21 @@
         }
     }
 
-    private void onRemove(RemovingEventArgs args)
+    private async Task onRemove(RemovingEventArgs args)
     {
-        foreach (var removeFile in args.FilesData)
+        bool isConfirm = await DialogService.ConfirmAsync("Are you sure you want to permanently delete these item?", "Delete Attachment");
+        string confirmMessage = isConfirm ? "confirmed" : "canceled";
+        if (isConfirm)
         {
-            Directory.CreateDirectory(Path.Combine("wwwroot\\files", Id.ToString()!));
-            string path = Path.Combine("wwwroot\\files\\", $"{Id.ToString()}/", removeFile.Name);
-            if (File.Exists(path))
+            foreach (var removeFile in args.FilesData)
             {
-                File.Delete(path);
-                attachments.Remove(attachments.First(x => x.FileName!.Equals(removeFile.Name)));
+                Directory.CreateDirectory(Path.Combine("wwwroot\\files", Id.ToString()!));
+                string path = Path.Combine("wwwroot\\files\\", $"{Id.ToString()}/", removeFile.Name);
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                    attachments.Remove(attachments.First(x => x.FileName!.Equals(removeFile.Name)));
+                }
             }
         }
     }
