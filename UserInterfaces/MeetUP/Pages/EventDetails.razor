@@ -9,33 +9,27 @@
     <div class="row">
         <div class="col-sm-12 col-md-6">
             <SfCard>
-                <CardHeader Title="Appointment Details" />
+                <CardHeader Title="Details" />
                 <CardContent>
                     <EditForm Model="@appointment">
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label>Subject</label>
+                                <label class="ps-2">Subject</label>
                                 <SfTextBox Placeholder='Subject' Readonly @bind-Value="appointment.Subject"></SfTextBox>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label>Start Date/Time</label>
-                                <SfDateTimePicker @bind-Value="appointment.StartTime" Readonly="false" ></SfDateTimePicker>
+                                <label class="ps-2">Start Date/Time</label>
+                                <SfDateTimePicker @bind-Value="appointment.StartTime" Readonly="false"></SfDateTimePicker>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label>End Date/Time</label>
-                                <SfDateTimePicker @bind-Value="appointment.EndTime" Readonly="false" ></SfDateTimePicker>
+                                <label class="ps-2">End Date/Time</label>
+                                <SfDateTimePicker @bind-Value="appointment.EndTime" Readonly="false"></SfDateTimePicker>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="Name">Short Description</label>
+                                <label class="ps-2">Short Description</label>
                                 <SfTextBox @bind-Value="appointment.ShortDescription" Multiline CssClass="description"></SfTextBox>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <SfButton @onclick="@AlertBtn">Update Event</SfButton>
-                                <div class="status" style="padding-top:10px">@DialogStatus</div>
                             </div>
                         </div>
                     </EditForm>
@@ -44,7 +38,7 @@
         </div>
         <div class="col-sm-12 col-md-6">
             <SfCard>
-                <CardHeader Title="Appointment Details" />
+                <CardHeader Title="Attendees" />
                 <CardContent>
                     <div>
                         <label>Subject</label>
@@ -75,7 +69,6 @@
                                 </GridCommandColumns>
                             </GridColumn>
                         </GridColumns>
-
                     </SfGrid>
                 </CardContent>
                 <CardFooter>
@@ -89,11 +82,33 @@
         </div>
         <div class="col-sm-12 col-md-6">
             <SfCard>
-                <CardHeader Title="Appointment Details" />
+                <CardHeader Title="Topics" />
                 <CardContent>
-                    <div>
-                        <label>Subject</label>
+                    <div class="p-2 row">
+                        <SfMessage ShowIcon="false" ContentAlignment="HorizontalAlign.Right">
+                            <SfButton IconCss="e-icons e-plus" OnClick="@AddTopic">Add New Topic</SfButton>
+                        </SfMessage>
+                    </div>
+                    <div class="p-2 row">
+                        <SfGrid DataSource="@topics" AllowPaging ID="TopicDetails">
+                            <GridPageSettings PageSize="5"></GridPageSettings>
 
+                            <GridColumns>
+                                <GridColumn Field="@nameof(Topic.TPriority)" HeaderText="Priority" Width="100"></GridColumn>
+                                <GridColumn Field="@nameof(Topic.IsTaskCreated)" HeaderText="Task" Width="75"></GridColumn>
+                                <GridColumn Field="@nameof(Topic.TTitle)" HeaderText="Title"></GridColumn>
+                                <GridColumn TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="50">
+                                    <GridCommandColumns>
+                                        <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { IconCss="e-icons e-plus", CssClass="m-0"})" ID="AddTopicDetail"></GridCommandColumn>
+                                    </GridCommandColumns>
+                                </GridColumn>
+                                <GridColumn TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="50">
+                                    <GridCommandColumns>
+                                        <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { IconCss="e-icons e-trash", CssClass="m-0"})" ID="DelTopic"></GridCommandColumn>
+                                    </GridCommandColumns>
+                                </GridColumn>
+                            </GridColumns>
+                        </SfGrid>
                     </div>
                 </CardContent>
             </SfCard>
@@ -101,7 +116,31 @@
     </div>
 </div>
 
+<SfDialog Width="400px" MinHeight="350px" IsModal="true" @bind-Visible="@IsVisible" @ref="SfAddDialog">
+    <DialogEvents OnOverlayModalClick="@OnOverlayclick">
+    </DialogEvents>
+    <DialogTemplates>
+        <Header>
+            <SfMessage ShowIcon="false" ContentAlignment="HorizontalAlign.Left" CssClass="d-flex">Add New Topic</SfMessage>
+        </Header>
+        <Content>
+            <EditForm Model="@addTopic">
+                <SfComboBox TValue="string" TItem="Priority" DataSource="@LocalData" Placeholder="Select Priority"
+                            FloatLabelType="FloatLabelType.Auto" @bind-Value="addTopic.TPriority">
+                    <ComboBoxFieldSettings Value="ID" Text="Value"></ComboBoxFieldSettings>
+                </SfComboBox>
+                <SfTextBox @bind-Value="addTopic.TTitle" Placeholder='Title' FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+                <SfTextBox @bind-Value="addTopic.TDetails" Placeholder='Details' Multiline CssClass="mb-2" style="height:100px" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+            </EditForm>
+        </Content>
+        <FooterTemplate>
+            <SfButton OnClick="SaveTopic">Add</SfButton>
+        </FooterTemplate>
+    </DialogTemplates>
+</SfDialog>
+
 <style>
+
     .e-upload .e-upload-files .e-upload-file-list {
         background-color: aliceblue;
     }
@@ -120,14 +159,8 @@
     public Guid? Id { get; set; }
 
     private AppointmentDataDto appointment { get; set; } = new();
-    private string[]? fileNames { get; set; }
-
-    private string DialogStatus { get; set; }
-    private async Task AlertBtn()
-    {
-        await DialogService.AlertAsync("10% of battery remaining", "Low Battery");
-        this.DialogStatus = "The user closed the Alert dialog";
-    }
+    private Topic addTopic { get; set; } = new();
+    SfDialog SfAddDialog;
 
     protected override void OnInitialized()
     {
@@ -146,10 +179,40 @@
         }
     }
 
+    private string[]? fileNames { get; set; }
     public class Attachment
     {
         public string? FileName { get; set; }
     }
+
+    public class Priority
+    {
+        public string ID { get; set; } = string.Empty;
+        public string Value { get; set; } = string.Empty;
+    }
+
+    List<Priority> LocalData = new List<Priority>
+    {
+        new Priority() { ID= "High", Value= "High" },
+        new Priority() { ID= "Medium", Value= "Medium" },
+        new Priority() { ID= "Low", Value= "Low" }
+    };
+
+    public class Topic
+    {
+        public string? TPriority { get; set; }
+        public string? TTitle { get; set; }
+        public string? TDetails { get; set; }
+        public bool IsTaskCreated { get; set; } = false;
+    }
+
+    ObservableCollection<Topic> topics = new ObservableCollection<Topic>
+    {
+        new Topic { TPriority="High", TTitle="Test Title-1"},
+        new Topic { TPriority="Medium", TTitle="Test Title-2"},
+
+    };
+
 
     private ObservableCollection<Attachment> attachments = new();
 
@@ -171,6 +234,32 @@
     }
 
     public Attachment? RowDetails { get; set; }
+
+    private bool IsVisible { get; set; } = false;
+    public void AddTopic()
+    {
+        addTopic = new();
+        this.IsVisible = true;
+    }
+
+
+    public async Task SaveTopic()
+    {
+        topics.Add(new Topic
+            {
+                TPriority = addTopic.TPriority,
+                TTitle = addTopic.TTitle,
+                TDetails = addTopic.TDetails,
+                IsTaskCreated = false
+            });
+        await SfAddDialog.HideAsync();
+
+    }
+
+    private void OnOverlayclick(OverlayModalClickEventArgs arg)
+    {
+        this.IsVisible = false;
+    }
 
     public async Task OnCommandClicked(CommandClickEventArgs<Attachment> args)
     {
@@ -252,21 +341,16 @@
         }
     }
 
-    private async Task onRemove(RemovingEventArgs args)
+    private void onRemove(RemovingEventArgs args)
     {
-        bool isConfirm = await DialogService.ConfirmAsync("Are you sure you want to permanently delete these item?", "Delete Attachment");
-        string confirmMessage = isConfirm ? "confirmed" : "canceled";
-        if (isConfirm)
+        foreach (var removeFile in args.FilesData)
         {
-            foreach (var removeFile in args.FilesData)
+            Directory.CreateDirectory(Path.Combine("wwwroot\\files", Id.ToString()!));
+            string path = Path.Combine("wwwroot\\files\\", $"{Id.ToString()}/", removeFile.Name);
+            if (File.Exists(path))
             {
-                Directory.CreateDirectory(Path.Combine("wwwroot\\files", Id.ToString()!));
-                string path = Path.Combine("wwwroot\\files\\", $"{Id.ToString()}/", removeFile.Name);
-                if (File.Exists(path))
-                {
-                    File.Delete(path);
-                    attachments.Remove(attachments.First(x => x.FileName!.Equals(removeFile.Name)));
-                }
+                File.Delete(path);
+                attachments.Remove(attachments.First(x => x.FileName!.Equals(removeFile.Name)));
             }
         }
     }
