@@ -47,6 +47,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SignalRService", "SignalRSe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeetUP", "UserInterfaces\MeetUP\MeetUP.csproj", "{F03E790E-8B08-4AD2-800A-27F7736FF348}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Models\Entities\Entities\Entities.csproj", "{D50F27EB-B9AF-4856-8360-2A5D85336EFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{F03E790E-8B08-4AD2-800A-27F7736FF348}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F03E790E-8B08-4AD2-800A-27F7736FF348}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F03E790E-8B08-4AD2-800A-27F7736FF348}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D50F27EB-B9AF-4856-8360-2A5D85336EFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D50F27EB-B9AF-4856-8360-2A5D85336EFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D50F27EB-B9AF-4856-8360-2A5D85336EFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D50F27EB-B9AF-4856-8360-2A5D85336EFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,6 +92,7 @@ Global
 		{3B989E3A-7CDF-4F5D-A540-83766DB57FBF} = {FA55E454-8516-4EF7-AF19-BBED0E9886EF}
 		{EE1D06F1-230E-424F-83DC-CA83112A9765} = {FA55E454-8516-4EF7-AF19-BBED0E9886EF}
 		{F03E790E-8B08-4AD2-800A-27F7736FF348} = {2B8CDCD6-B602-4D1F-AA93-F5E49527889E}
+		{D50F27EB-B9AF-4856-8360-2A5D85336EFC} = {DC330104-1964-4586-BB9E-10D4E932C457}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F2D62D6A-8566-4439-813F-25A1F19B41A7}
