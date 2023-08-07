@@ -1,6 +1,6 @@
-﻿using Services.Dupus.Services.Contracts;
+﻿using ProjectServices.Dupus.Services.Contracts;
 
-namespace Services.Dupus.Services.Contracts
+namespace ProjectServices.Dupus.Services.Contracts
 {
     public interface IServiceManager
     {
