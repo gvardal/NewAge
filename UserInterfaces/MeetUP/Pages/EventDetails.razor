@@ -2,6 +2,7 @@
 @page "/details/{Id:guid}"
 @using System.Collections.ObjectModel;
 @using System.ComponentModel;
+@using Microsoft.AspNetCore.Http.Extensions;
 @inject NavigationManager navigationManager
 @inject SfDialogService DialogService
 
@@ -41,8 +42,6 @@
                 <CardHeader Title="Attendees" />
                 <CardContent>
                     <div>
-                        <label>Subject</label>
-
                     </div>
                 </CardContent>
             </SfCard>
@@ -92,10 +91,36 @@
                     <div class="p-2 row">
                         <SfGrid DataSource="@topics" AllowPaging ID="TopicDetails">
                             <GridPageSettings PageSize="5"></GridPageSettings>
-
+                            <GridEvents CommandClicked="OnTopicsClicked" TValue="Topic"> </GridEvents>
                             <GridColumns>
-                                <GridColumn Field="@nameof(Topic.TPriority)" HeaderText="Priority" Width="100"></GridColumn>
-                                <GridColumn Field="@nameof(Topic.IsTaskCreated)" HeaderText="Task" Width="75"></GridColumn>
+                                <GridColumn Field="@nameof(Topic.TPriority)" HeaderText="Priority" Width="100">
+                                    <Template>
+                                        @{
+                                            var topic = (context as Topic);
+                                            <div class="trust">
+                                                <img style="width: 31px; height: 24px" alt=@topic!.TPriority src=@($"icons/{@topic.TPriority!.ToLower()}.png") />
+                                                <span id="Trusttext">@topic!.TPriority</span>
+                                            </div>
+                                        }
+                                    </Template>
+                                </GridColumn>
+                                <GridColumn Field="@nameof(Topic.IsTaskCreated)" HeaderText="Task" HeaderTextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="60">
+                                    <Template>
+                                        @{
+                                            var topic = (context as Topic);
+                                            <div class="trust">
+                                                @if (topic!.IsTaskCreated)
+                                                {
+                                                    <img alt=@topic!.TPriority src=@($"icons/task.png") />
+                                                }
+                                                else
+                                                {
+                                                    <img alt=@topic!.TPriority src=@($"icons/nottask.png") />
+                                                }
+                                            </div>
+                                        }
+                                    </Template>
+                                </GridColumn>
                                 <GridColumn Field="@nameof(Topic.TTitle)" HeaderText="Title"></GridColumn>
                                 <GridColumn TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="50">
                                     <GridCommandColumns>
@@ -117,11 +142,9 @@
 </div>
 
 <SfDialog Width="400px" MinHeight="350px" IsModal="true" @bind-Visible="@IsVisible" @ref="SfAddDialog">
-    <DialogEvents OnOverlayModalClick="@OnOverlayclick">
-    </DialogEvents>
     <DialogTemplates>
         <Header>
-            <SfMessage ShowIcon="false" ContentAlignment="HorizontalAlign.Left" CssClass="d-flex">Add New Topic</SfMessage>
+            <SfMessage ShowIcon="false" ContentAlignment="HorizontalAlign.Left">Add New Topic</SfMessage>
         </Header>
         <Content>
             <EditForm Model="@addTopic">
@@ -133,10 +156,30 @@
                 <SfTextBox @bind-Value="addTopic.TDetails" Placeholder='Details' Multiline CssClass="mb-2" style="height:100px" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
             </EditForm>
         </Content>
-        <FooterTemplate>
-            <SfButton OnClick="SaveTopic">Add</SfButton>
-        </FooterTemplate>
     </DialogTemplates>
+    <DialogButtons>
+        <DialogButton Content="Add New Topic" OnClick="@SaveTopic" />
+        <DialogButton Content="Close" OnClick="@CloseAddDialog" />
+    </DialogButtons>
+</SfDialog>
+
+
+<SfDialog Width="550px" MinHeight="600" ShowCloseIcon="false" IsModal="true" CloseOnEscape="false" @bind-Visible="@AddDetailsVisible">
+    <DialogEvents Opened="@DialogOpen"></DialogEvents>
+    <DialogTemplates>
+        <Header>
+            <SfMessage ShowIcon="false" ContentAlignment="HorizontalAlign.Left">Update Topic Detail</SfMessage>
+        </Header>
+        <Content>
+            <SfRichTextEditor @ref="RteObj" Height="500">
+                <RichTextEditorToolbarSettings Items="@Tools" Type="ToolbarType.MultiRow" />
+            </SfRichTextEditor>
+        </Content>
+    </DialogTemplates>
+    <DialogButtons>
+        <DialogButton Content="Update Topic Detail" OnClick="@CloseDetailsDialog" />
+        <DialogButton Content="Close" OnClick="@CloseDetailsDialog" />
+    </DialogButtons>
 </SfDialog>
 
 <style>
@@ -151,6 +194,10 @@
         color: cornflowerblue;
     }
 
+    .e-dialog .e-dlg-content {
+        padding: 14px;
+    }
+
 </style>
 
 @code
@@ -160,7 +207,42 @@
 
     private AppointmentDataDto appointment { get; set; } = new();
     private Topic addTopic { get; set; } = new();
+    private bool IsVisible { get; set; } = false;
+    private bool AddDetailsVisible { get; set; } = false;
+
     SfDialog SfAddDialog;
+
+    private List<ToolbarItemModel> Tools = new List<ToolbarItemModel>()
+    {
+        new ToolbarItemModel() { Command = ToolbarCommand.Bold },
+        new ToolbarItemModel() { Command = ToolbarCommand.Italic },
+        new ToolbarItemModel() { Command = ToolbarCommand.Underline },
+        new ToolbarItemModel() { Command = ToolbarCommand.FontName },
+        new ToolbarItemModel() { Command = ToolbarCommand.FontSize },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.FontColor },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.Formats },
+        new ToolbarItemModel() { Command = ToolbarCommand.Alignments },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.SuperScript },
+        new ToolbarItemModel() { Command = ToolbarCommand.SubScript },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.OrderedList },
+        new ToolbarItemModel() { Command = ToolbarCommand.UnorderedList },
+        new ToolbarItemModel() { Command = ToolbarCommand.Outdent },
+        new ToolbarItemModel() { Command = ToolbarCommand.Indent },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.CreateLink },
+        new ToolbarItemModel() { Command = ToolbarCommand.Image },
+        new ToolbarItemModel() { Command = ToolbarCommand.CreateTable },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.Print },
+        new ToolbarItemModel() { Command = ToolbarCommand.FullScreen },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.Undo },
+        new ToolbarItemModel() { Command = ToolbarCommand.Redo }
+    };
 
     protected override void OnInitialized()
     {
@@ -209,10 +291,9 @@
     ObservableCollection<Topic> topics = new ObservableCollection<Topic>
     {
         new Topic { TPriority="High", TTitle="Test Title-1"},
-        new Topic { TPriority="Medium", TTitle="Test Title-2"},
+        new Topic { TPriority="Medium", TTitle="Test Title-2", IsTaskCreated=true},
 
     };
-
 
     private ObservableCollection<Attachment> attachments = new();
 
@@ -235,13 +316,11 @@
 
     public Attachment? RowDetails { get; set; }
 
-    private bool IsVisible { get; set; } = false;
     public void AddTopic()
     {
         addTopic = new();
         this.IsVisible = true;
     }
-
 
     public async Task SaveTopic()
     {
@@ -256,9 +335,46 @@
 
     }
 
-    private void OnOverlayclick(OverlayModalClickEventArgs arg)
+    private void CloseAddDialog()
     {
         this.IsVisible = false;
+    }
+
+
+    SfRichTextEditor RteObj;
+
+    private async Task DialogOpen()
+    {
+        if (RteObj is not null)
+        {
+            await RteObj.RefreshUIAsync();
+        }
+    }
+
+    private void UpdateTopicDetail()
+    {
+        AddDetailsVisible = false;
+    }
+
+    private void CloseDetailsDialog()
+    {
+        AddDetailsVisible = false;
+    }
+
+    public async Task OnTopicsClicked(CommandClickEventArgs<Topic> args)
+    {
+        if (args.CommandColumn.ID == "AddTopicDetail")
+        {
+            AddDetailsVisible = true;
+        }
+        if (args.CommandColumn.ID == "DelTopic")
+        {
+            bool isConfirm = await DialogService.ConfirmAsync("Are you sure you want to permanently delete this topic?", "Delete Topic");
+            if (isConfirm)
+            {
+                topics.Remove(topics.First(x => x.TTitle!.Equals(args.RowData.TTitle)));
+            }
+        }
     }
 
     public async Task OnCommandClicked(CommandClickEventArgs<Attachment> args)
