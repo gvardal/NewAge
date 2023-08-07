@@ -2,9 +2,9 @@
 using Models.Entities.Dupus.Entity.Dtos;
 using Models.Entities.Dupus.Entity.Models;
 using ProjectRepositories.Dupus.Repository.Contracts;
-using Services.Dupus.Services.Contracts;
+using ProjectServices.Dupus.Services.Contracts;
 
-namespace Services.Dupus.Services
+namespace ProjectServices.Dupus.Services
 {
     public class KonumService : IKonumService
     {

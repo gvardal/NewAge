@@ -1,6 +1,6 @@
 ﻿using Models.Entities.Dupus.Entity.Models;
 
-namespace Services.Dupus.Services.Contracts
+namespace ProjectServices.Dupus.Services.Contracts
 {
     public interface IKonumTuruService
     {
