@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationWebApi", "Use
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JWTAuthenticationManager", "UserManagement\JWTAuthenticationManager\JWTAuthenticationManager.csproj", "{B2CD5875-B4A7-48F3-AD5D-2A3B89A9A2CA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiProjects", "ApiProjects", "{9008E03F-6B58-40C9-A20D-6AEA28256B4A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserInterfaces", "UserInterfaces", "{2154E44A-E585-4AF0-8CA8-D3C6FA04CCE0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{4FB818FA-9ADB-468E-B7C0-A1C4B598505E}"
@@ -55,6 +53,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectServices", "ProjectS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dupus.Service", "ProjectServices\Dupus.Service\Dupus.Service\Dupus.Service.csproj", "{C8938C71-E3B1-421B-AFCB-3BFAC9A3C284}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiProjects", "ApiProjects", "{102B5D12-DC0E-4DEB-A9C9-61B04EEFF834}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dupus.API", "ApiProjects\Dupus.API\Dupus.API.csproj", "{D4FBE599-A362-42E4-ACA5-AEF3200F416F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,6 +91,10 @@ Global
 		{C8938C71-E3B1-421B-AFCB-3BFAC9A3C284}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8938C71-E3B1-421B-AFCB-3BFAC9A3C284}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8938C71-E3B1-421B-AFCB-3BFAC9A3C284}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4FBE599-A362-42E4-ACA5-AEF3200F416F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4FBE599-A362-42E4-ACA5-AEF3200F416F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4FBE599-A362-42E4-ACA5-AEF3200F416F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4FBE599-A362-42E4-ACA5-AEF3200F416F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -110,6 +116,7 @@ Global
 		{89144E2B-6672-42EB-A30D-6E163A9B15F9} = {DC330104-1964-4586-BB9E-10D4E932C457}
 		{FD0E10AD-65EA-4DBA-882E-005B275B6198} = {CE7C806C-97DC-4CF2-87FF-16827133AE48}
 		{C8938C71-E3B1-421B-AFCB-3BFAC9A3C284} = {51C79A9A-166A-4F6E-8543-A0F3E7970B6D}
+		{D4FBE599-A362-42E4-ACA5-AEF3200F416F} = {102B5D12-DC0E-4DEB-A9C9-61B04EEFF834}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F2D62D6A-8566-4439-813F-25A1F19B41A7}
