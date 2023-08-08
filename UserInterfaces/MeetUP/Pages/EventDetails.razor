@@ -6,9 +6,9 @@
 @inject NavigationManager navigationManager
 @inject SfDialogService DialogService
 
-<div>
-    <div class="row">
-        <div class="col-sm-12 col-md-6">
+<div class="row">
+    <div class="col me-2">
+        <div class="row mb-2">
             <SfCard>
                 <CardHeader Title="Details" />
                 <CardContent>
@@ -30,25 +30,79 @@
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <label class="ps-2">Short Description</label>
-                                <SfTextBox @bind-Value="appointment.ShortDescription" Multiline CssClass="description"></SfTextBox>
+                                <SfTextBox @bind-Value="appointment.ShortDescription" Multiline CssClass="description" style="height:100px"></SfTextBox>
                             </div>
                         </div>
                     </EditForm>
                 </CardContent>
             </SfCard>
         </div>
-        <div class="col-sm-12 col-md-6">
+        <div class="row">
             <SfCard>
-                <CardHeader Title="Attendees" />
+                <CardHeader Title="Topics" />
                 <CardContent>
-                    <div>
+                    <div class="p-2 row">
+                        <SfMessage ShowIcon="false" ContentAlignment="HorizontalAlign.Right">
+                            <SfButton IconCss="e-icons e-plus" OnClick="@AddTopic">Add New Topic</SfButton>
+                        </SfMessage>
+                    </div>
+                    <div class="p-2 row">
+                        <SfGrid DataSource="@topics" AllowPaging ID="TopicDetails">
+                            <GridPageSettings PageSize="5"></GridPageSettings>
+                            <GridEvents CommandClicked="OnTopicsClicked" TValue="Topic"> </GridEvents>
+                            <GridColumns>
+                                <GridColumn Field="@nameof(Topic.TPriority)" HeaderText="Priority" Width="75" HeaderTextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
+                                    <Template>
+                                        @{
+                                            var topic = (context as Topic);
+                                            <div class="trust">
+                                                <img style="width: 36px; height: 36px" alt=@topic!.TPriority src=@($"icons/{@topic.TPriority!.ToLower()}.png") />
+                                            </div>
+                                        }
+                                    </Template>
+                                </GridColumn>
+                                <GridColumn Field="@nameof(Topic.IsTaskCreated)" HeaderText="Task" HeaderTextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="60">
+                                    <Template>
+                                        @{
+                                            var topic = (context as Topic);
+                                            <div class="trust">
+                                                @if (topic!.IsTaskCreated)
+                                                {
+                                                    <img style="width: 36px; height: 36px" alt=@topic!.TPriority src=@($"icons/task.png") />
+                                                }
+                                                else
+                                                {
+                                                    <img style="width: 36px; height: 36px" alt=@topic!.TPriority src=@($"icons/nottask.png") />
+                                                }
+                                            </div>
+                                        }
+                                    </Template>
+                                </GridColumn>
+                                <GridColumn Field="@nameof(Topic.TTitle)" HeaderText="Title"></GridColumn>
+                                <GridColumn TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="50">
+                                    <GridCommandColumns>
+                                        <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { IconCss="e-icons e-plus", CssClass="m-0"})" ID="AddTopicDetail"></GridCommandColumn>
+                                    </GridCommandColumns>
+                                </GridColumn>
+                                <GridColumn TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="50">
+                                    <GridCommandColumns>
+                                        <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { IconCss="e-icons e-description", CssClass="m-0"})" ID="MakeTask"></GridCommandColumn>
+                                    </GridCommandColumns>
+                                </GridColumn>
+                                <GridColumn TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="50">
+                                    <GridCommandColumns>
+                                        <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { IconCss="e-icons e-trash", CssClass="m-0"})" ID="DelTopic"></GridCommandColumn>
+                                    </GridCommandColumns>
+                                </GridColumn>
+                            </GridColumns>
+                        </SfGrid>
                     </div>
                 </CardContent>
             </SfCard>
         </div>
     </div>
-    <div class="row py-4">
-        <div class="col-sm-12 col-md-6">
+    <div class="col">
+        <div class="row mb-2">
             <SfCard>
                 <CardHeader Title="Attachments" />
                 <CardContent>
@@ -79,61 +133,54 @@
                 </CardFooter>
             </SfCard>
         </div>
-        <div class="col-sm-12 col-md-6">
+        <div class="row">
             <SfCard>
-                <CardHeader Title="Topics" />
+                <CardHeader Title="Attendees" />
                 <CardContent>
-                    <div class="p-2 row">
-                        <SfMessage ShowIcon="false" ContentAlignment="HorizontalAlign.Right">
-                            <SfButton IconCss="e-icons e-plus" OnClick="@AddTopic">Add New Topic</SfButton>
-                        </SfMessage>
+                    <div class="row mb-2">
+                    <div class="col-6">
+                        @{
+                            var listData = ListViewDataSource.Skip(SkipValue).Take(TakeValue).ToList();
+                            <SfListView Id="List"
+                                        DataSource="@listData"
+                                        HeaderTitle="Contacts"
+                                        ShowHeader="false"
+                                        CssClass="e-list-template"
+                                        SortOrder="Syncfusion.Blazor.Lists.SortOrder.Ascending">
+                                <ListViewFieldSettings TValue="ListDataModel" Id="Id" Text="Text"></ListViewFieldSettings>
+                                <ListViewTemplates TValue="ListDataModel">
+                                    <Template>
+                                        <div class="e-list-wrapper e-list-multi-line e-list-avatar">
+                                            @if (((context as ListDataModel).Avatar) != "")
+                                            {
+                                                <span class="e-avatar e-avatar-circle">@((context as ListDataModel).Avatar)</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="@((context as ListDataModel).Pic) e-avatar e-avatar-circle"> </span>
+                                            }
+                                            <span class="e-list-item-header">@((context as ListDataModel).Text)</span>
+                                            <span class="e-list-content">@((context as ListDataModel).Contact)</span>
+                                        </div>
+                                    </Template>
+                                </ListViewTemplates>
+                            </SfListView>
+                        }
+                        <SfPager @ref="@Page" ShowPagerMessage="false" PageSize=5 TotalItemsCount=ListViewDataSource.Count() ItemClick="Click" CssClass="mt-2">
+                        </SfPager>
                     </div>
-                    <div class="p-2 row">
-                        <SfGrid DataSource="@topics" AllowPaging ID="TopicDetails">
-                            <GridPageSettings PageSize="5"></GridPageSettings>
-                            <GridEvents CommandClicked="OnTopicsClicked" TValue="Topic"> </GridEvents>
-                            <GridColumns>
-                                <GridColumn Field="@nameof(Topic.TPriority)" HeaderText="Priority" Width="100">
-                                    <Template>
-                                        @{
-                                            var topic = (context as Topic);
-                                            <div class="trust">
-                                                <img style="width: 31px; height: 24px" alt=@topic!.TPriority src=@($"icons/{@topic.TPriority!.ToLower()}.png") />
-                                                <span id="Trusttext">@topic!.TPriority</span>
-                                            </div>
-                                        }
-                                    </Template>
-                                </GridColumn>
-                                <GridColumn Field="@nameof(Topic.IsTaskCreated)" HeaderText="Task" HeaderTextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="60">
-                                    <Template>
-                                        @{
-                                            var topic = (context as Topic);
-                                            <div class="trust">
-                                                @if (topic!.IsTaskCreated)
-                                                {
-                                                    <img alt=@topic!.TPriority src=@($"icons/task.png") />
-                                                }
-                                                else
-                                                {
-                                                    <img alt=@topic!.TPriority src=@($"icons/nottask.png") />
-                                                }
-                                            </div>
-                                        }
-                                    </Template>
-                                </GridColumn>
-                                <GridColumn Field="@nameof(Topic.TTitle)" HeaderText="Title"></GridColumn>
-                                <GridColumn TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="50">
-                                    <GridCommandColumns>
-                                        <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { IconCss="e-icons e-plus", CssClass="m-0"})" ID="AddTopicDetail"></GridCommandColumn>
-                                    </GridCommandColumns>
-                                </GridColumn>
-                                <GridColumn TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="50">
-                                    <GridCommandColumns>
-                                        <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { IconCss="e-icons e-trash", CssClass="m-0"})" ID="DelTopic"></GridCommandColumn>
-                                    </GridCommandColumns>
-                                </GridColumn>
-                            </GridColumns>
-                        </SfGrid>
+                    <div class="col-6">
+                        <SfCard>
+                            <CardHeader Title="Add New Attendee"></CardHeader>
+                            <CardContent>
+                                    <div class="p-2 row">
+                                        <SfMessage ShowIcon="false" ContentAlignment="HorizontalAlign.Left">
+                                            <SfButton IconCss="e-icons e-people">Make Request</SfButton>
+                                        </SfMessage>
+                                    </div>
+                            </CardContent>
+                        </SfCard>
+                    </div>
                     </div>
                 </CardContent>
             </SfCard>
@@ -171,13 +218,13 @@
             <SfMessage ShowIcon="false" ContentAlignment="HorizontalAlign.Left">Update Topic Detail</SfMessage>
         </Header>
         <Content>
-            <SfRichTextEditor @ref="RteObj" Height="500">
+            <SfRichTextEditor @ref="RteObj" Height="500" @bind-Value="@TopicDetailValue">
                 <RichTextEditorToolbarSettings Items="@Tools" Type="ToolbarType.MultiRow" />
             </SfRichTextEditor>
         </Content>
     </DialogTemplates>
     <DialogButtons>
-        <DialogButton Content="Update Topic Detail" OnClick="@CloseDetailsDialog" />
+        <DialogButton Content="Update Topic Detail" OnClick="@UpdateTopicDetail" />
         <DialogButton Content="Close" OnClick="@CloseDetailsDialog" />
     </DialogButtons>
 </SfDialog>
@@ -198,6 +245,45 @@
         padding: 14px;
     }
 
+    .pic01 {
+        background-image: url("https://ej2.syncfusion.com/demos/src/grid/images/1.png");
+    }
+
+    /*.e-listview.e-control {
+            width: 400px;
+        }
+
+        .pic01 {
+            background-image: url("https://ej2.syncfusion.com/demos/src/grid/images/1.png");
+        }
+
+        .pic02 {
+            background-image: url("https://ej2.syncfusion.com/demos/src/grid/images/3.png");
+        }
+
+        .pic03 {
+            background-image: url("https://ej2.syncfusion.com/demos/src/grid/images/5.png");
+        }
+
+        .pic04 {
+            background-image: url("https://ej2.syncfusion.com/demos/src/grid/images/2.png");
+        }
+
+        #List .e-list-item:nth-child(1) .e-avatar {
+            background-color: #039be5;
+        }
+
+        #List .e-list-item:nth-child(2) .e-avatar {
+            background-color: #e91e63;
+        }
+
+        #List .e-list-item:nth-child(6) .e-avatar {
+            background-color: #009688;
+        }
+
+        #List .e-list-item:nth-child(8) .e-avatar {
+            background-color: #000088;
+        }*/
 </style>
 
 @code
@@ -209,6 +295,7 @@
     private Topic addTopic { get; set; } = new();
     private bool IsVisible { get; set; } = false;
     private bool AddDetailsVisible { get; set; } = false;
+    private string? TopicDetailValue { get; set; }
 
     SfDialog SfAddDialog;
 
@@ -282,6 +369,7 @@
 
     public class Topic
     {
+        public Guid TId { get; set; }
         public string? TPriority { get; set; }
         public string? TTitle { get; set; }
         public string? TDetails { get; set; }
@@ -290,8 +378,12 @@
 
     ObservableCollection<Topic> topics = new ObservableCollection<Topic>
     {
-        new Topic { TPriority="High", TTitle="Test Title-1"},
-        new Topic { TPriority="Medium", TTitle="Test Title-2", IsTaskCreated=true},
+        new Topic { TId=new Guid("99bdc3c4-5b7f-4b24-be11-8b72c7b17842") ,TPriority="High", TTitle="Test Title-1" ,TDetails="test detail."},
+        new Topic { TId=new Guid("f675db89-6bc6-442f-9bf9-8044c8092a91") ,TPriority="Medium", TTitle="Test Title-2",TDetails="test detail of Title-2", IsTaskCreated=true},
+        new Topic { TId=new Guid("99bdc3c4-5b7f-4b24-be11-8b72c7b17842") ,TPriority="Low", TTitle="Test Title-3" ,TDetails="test detail."},
+        new Topic { TId=new Guid("f675db89-6bc6-442f-9bf9-8044c8092a91") ,TPriority="Medium", TTitle="Test Title-4",TDetails="test detail of Title-2", IsTaskCreated=true},
+        new Topic { TId=new Guid("99bdc3c4-5b7f-4b24-be11-8b72c7b17842") ,TPriority="Low", TTitle="Test Title-5" ,TDetails="test detail."},
+        new Topic { TId=new Guid("f675db89-6bc6-442f-9bf9-8044c8092a91") ,TPriority="High", TTitle="Test Title-6",TDetails="test detail of Title-2"},
 
     };
 
@@ -326,6 +418,7 @@
     {
         topics.Add(new Topic
             {
+                TId = new Guid(),
                 TPriority = addTopic.TPriority,
                 TTitle = addTopic.TTitle,
                 TDetails = addTopic.TDetails,
@@ -340,7 +433,6 @@
         this.IsVisible = false;
     }
 
-
     SfRichTextEditor RteObj;
 
     private async Task DialogOpen()
@@ -351,8 +443,15 @@
         }
     }
 
+    private Guid UpdatedTopicId { get; set; } = Guid.Empty;
+
     private void UpdateTopicDetail()
     {
+        var topic = topics.FirstOrDefault(x => x.TId.Equals(UpdatedTopicId));
+        if (topic is not null)
+        {
+            topic.TDetails = TopicDetailValue;
+        }
         AddDetailsVisible = false;
     }
 
@@ -366,6 +465,15 @@
         if (args.CommandColumn.ID == "AddTopicDetail")
         {
             AddDetailsVisible = true;
+            UpdatedTopicId = args.RowData.TId;
+            if (!string.IsNullOrEmpty(UpdatedTopicId.ToString()))
+            {
+                var topic = topics.FirstOrDefault(x => x.TId.Equals(UpdatedTopicId));
+                if (topic is not null)
+                {
+                    TopicDetailValue = topic.TDetails;
+                }
+            }
         }
         if (args.CommandColumn.ID == "DelTopic")
         {
@@ -471,7 +579,185 @@
         }
     }
 
+    public int SkipValue;
+    public int TakeValue = 5;
+    SfPager Page;
+    public SfListView<ListDataModel> List { get; set; }
 
+    public void Click(PagerItemClickEventArgs args)
+    {
+        SkipValue = (args.CurrentPage * Page.PageSize) - Page.PageSize;
+        TakeValue = Page.PageSize;
+    }
 
+    List<ListDataModel> ListViewDataSource = new List<ListDataModel>() {
+        new ListDataModel {
+            Text = "Jenifer",
+            Contact = "(206) 555-985774",
+            Id = "1",
+            Avatar = "JE",
+        },
+        new ListDataModel {
+            Text = "Amenda",
+            Contact = "(206) 555-3412",
+            Id = "2",
+            Pic = "pic01",
+            Avatar = "AM",
+        },
+        new ListDataModel {
+            Text = "Isabella",
+            Contact = "(206) 555-8122",
+            Id = "4",
+            Avatar = "IS",
+        },
+        new ListDataModel {
+            Text = "William ",
+            Contact = "(206) 555-9482",
+            Id = "5",
+            Avatar = "WI",
+        },
+        new ListDataModel {
+            Text = "Jacob",
+            Contact = "(71) 555-4848",
+            Id = "6",
+            Avatar = "JA",
+        },
+        new ListDataModel {
+            Text = "Matthew",
+            Contact = "(71) 555-7773",
+            Id = "7",
+            Avatar = "MA",
+        },
+        new ListDataModel {
+            Text = "Oliver",
+            Contact = "(71) 555-5598",
+            Id = "8",
+            Avatar = "OL",
+        },
 
+        new ListDataModel {
+            Text = "Charlotte",
+            Contact = "(206) 555-1189",
+            Id = "9",
+            Avatar = "CH",
+        },
+        new ListDataModel {
+            Text = "Jacob",
+            Contact = "(71) 555-4848",
+            Id = "6",
+            Avatar = "JA",
+        },
+        new ListDataModel {
+            Text = "Matthew",
+            Contact = "(71) 555-7773",
+            Id = "7",
+            Avatar = "MA",
+        },
+        new ListDataModel {
+            Text = "Oliver",
+            Contact = "(71) 555-5598",
+            Id = "8",
+            Avatar = "OL",
+        },
+
+        new ListDataModel {
+            Text = "Charlotte",
+            Contact = "(206) 555-1189",
+            Id = "9",
+            Avatar = "CH",
+        }
+        ,
+        new ListDataModel {
+            Text = "Jacob",
+            Contact = "(71) 555-4848",
+            Id = "6",
+            Avatar = "JA",
+        },
+        new ListDataModel {
+            Text = "Matthew",
+            Contact = "(71) 555-7773",
+            Id = "7",
+            Avatar = "MA",
+        },
+        new ListDataModel {
+            Text = "Oliver",
+            Contact = "(71) 555-5598",
+            Id = "8",
+            Avatar = "OL",
+        },
+
+        new ListDataModel {
+            Text = "Charlotte",
+            Contact = "(206) 555-1189",
+            Id = "9",
+            Avatar = "CH",
+        },
+        new ListDataModel {
+            Text = "Jacob",
+            Contact = "(71) 555-4848",
+            Id = "6",
+            Avatar = "JA",
+        },
+        new ListDataModel {
+            Text = "Matthew",
+            Contact = "(71) 555-7773",
+            Id = "7",
+            Avatar = "MA",
+        },
+        new ListDataModel {
+            Text = "Oliver",
+            Contact = "(71) 555-5598",
+            Id = "8",
+            Avatar = "OL",
+        },
+
+        new ListDataModel {
+            Text = "Charlotte",
+            Contact = "(206) 555-1189",
+            Id = "9",
+            Avatar = "CH",
+        },
+        new ListDataModel {
+            Text = "Oliver",
+            Contact = "(71) 555-5598",
+            Id = "8",
+            Avatar = "OL",
+        },
+
+        new ListDataModel {
+            Text = "Charlotte",
+            Contact = "(206) 555-1189",
+            Id = "9",
+            Avatar = "CH",
+        }
+    };
+    // Specifies the model class for ListView datasource.
+    public class ListDataModel
+    {
+        public string Id
+        {
+            get;
+            set;
+        }
+        public string Text
+        {
+            get;
+            set;
+        }
+        public string Avatar
+        {
+            get;
+            set;
+        }
+        public string Pic
+        {
+            get;
+            set;
+        }
+        public string Contact
+        {
+            get;
+            set;
+        }
+    }
 }
