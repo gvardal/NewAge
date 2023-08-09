@@ -1,12 +1,12 @@
-﻿using Models.Entities.Dupus.Entity.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Dupus.Entity.Models.ProductionManagment;
 
 namespace ProjectRepositories.Dupus.Repository.Config
 {
-    public class UYUretimPlaniConfig : IEntityTypeConfiguration<UYUretimPlani>
+    public class UYUretimPlaniConfig : IEntityTypeConfiguration<ProductionPlan>
     {
-        public void Configure(EntityTypeBuilder<UYUretimPlani> builder)
+        public void Configure(EntityTypeBuilder<ProductionPlan> builder)
         {
             builder.HasKey(p => p.UretimPlaniID);
         }

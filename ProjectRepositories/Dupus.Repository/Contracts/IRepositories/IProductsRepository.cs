@@ -1,12 +1,12 @@
-﻿using Dupus.Repository.Contracts.IRepositoryBases;
-using Models.Entities.Dupus.Entity.Models;
+﻿using Dupus.Entity.Models.ProductionManagment;
+using Dupus.Repository.Contracts.IRepositoryBases;
 
 namespace Dupus.Repository.Contracts.IRepositories
 {
-    public interface IProductsRepository : IRepositoryBase<UYUrunler>
+    public interface IProductsRepository : IRepositoryBase<Productions>
     {
-        IQueryable<UYUrunler> GetAllProducts(bool trackChanges);
-        UYUrunler? GetProductById(int id, bool trackChanges);
+        IQueryable<Productions> GetAllProducts(bool trackChanges);
+        Productions? GetProductById(int id, bool trackChanges);
         string ProductName(int id, bool trackChanges);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using Dupus.Entity.Models.ProductionManagment;
 using Dupus.Repository.Contracts.IRepositoryManagers;
 using Models.Entities.Dupus.Entity.Dtos;
-using Models.Entities.Dupus.Entity.Models;
 using ProjectServices.Dupus.Services.Contracts;
 
 namespace Dupus.Service.Services
@@ -28,10 +28,10 @@ namespace Dupus.Service.Services
 
         #region Methods
 
-        public IEnumerable<UYKonum> GetAllLocations(bool trackChanges) => _repositoryManager.LocationRepository.GetAllLocations(trackChanges);
+        public IEnumerable<Locations> GetAllLocations(bool trackChanges) => _repositoryManager.LocationRepository.GetAllLocations(trackChanges);
 
 
-        public IEnumerable<UYKonum> GetLocationById(byte id, bool trackChanges) => _repositoryManager.LocationRepository.GetLocationById(id, trackChanges);
+        public IEnumerable<Locations> GetLocationById(int id, bool trackChanges) => _repositoryManager.LocationRepository.GetLocationById(id, trackChanges);
 
 
         public IEnumerable<GanttResourceGroupDto> GanttResourceGroup(byte id, bool trackChanges)

@@ -1,41 +1,37 @@
-﻿using Dupus.Repository.Contracts.IRepositories;
+﻿using Dupus.Entity.Models.ProductionManagment;
+using Dupus.Repository.Contracts.IRepositories;
 using Dupus.Repository.EFCore.RepositoryBases;
 using Dupus.Repository.EFCore.RepositoryContexts;
 using Microsoft.EntityFrameworkCore;
 using Models.Entities.Dupus.Entity.Dtos;
-using Models.Entities.Dupus.Entity.Models;
 
 namespace Dupus.Repository.EFCore.Repositories
 {
-    public class WorkOrderRepository : RepositoryBase<UYIsEmri>, IWorkOrderRepository
+    public class WorkOrderRepository : RepositoryBase<WorkOrder>, IWorkOrderRepository
     {
-        #region Members
-
-        private readonly IProductsRepository _urunler;
-
-        #endregion
+      
 
         #region Constructor
 
         public WorkOrderRepository(RepositoryContext context) : base(context)
         {
-            _urunler = new ProductsRepository(context);
+           
         }
 
         #endregion
 
         #region Methods
 
-        public IQueryable<UYIsEmri> GetAllWorkOrder(bool trackChanges) => GetAll(trackChanges);
+        public IQueryable<WorkOrder> GetAllWorkOrder(bool trackChanges) => GetAll(trackChanges);
 
-        public IQueryable<UYIsEmri> GetWorkOrderById(int id, bool trackChanges) => GetByCondition(x => x.IsEmriID.Equals(id), trackChanges);
+        public IQueryable<WorkOrder> GetWorkOrderById(int id, bool trackChanges) => GetByCondition(x => x.IsEmriID.Equals(id), trackChanges);
 
-        public IQueryable<UYIsEmriDurumu> GetAllWorkOrderStatus()
+        public IQueryable<WorkOrderStatus> GetAllWorkOrderStatus()
         {
             return _context.UYIsEmriDurumu.AsNoTracking();
         }
 
-        public UYIsEmriDurumu? GetWorkOrderStatusById(int id)
+        public WorkOrderStatus? GetWorkOrderStatusById(int id)
         {
             return _context.UYIsEmriDurumu.Where(x => x.IsEmriDurumId.Equals(id)).SingleOrDefault();
         }

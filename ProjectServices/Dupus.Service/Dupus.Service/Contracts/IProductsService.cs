@@ -1,10 +1,10 @@
-﻿using Models.Entities.Dupus.Entity.Models;
+﻿using Dupus.Entity.Models.ProductionManagment;
 
 namespace ProjectServices.Dupus.Services.Contracts
 {
     public interface IProductsService
     {
-        IEnumerable<UYUrunler> GetAllProducts(bool trackChanges);
-        UYUrunler? GetProductById(int id, bool trackChanges);
+        IEnumerable<Productions> GetAllProducts(bool trackChanges);
+        Productions? GetProductById(int id, bool trackChanges);
     }
 }

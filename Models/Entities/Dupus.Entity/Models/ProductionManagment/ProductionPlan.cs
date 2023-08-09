@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Models.Entities.Dupus.Entity.Models
+namespace Dupus.Entity.Models.ProductionManagment
 {
     [Table("UYUretimPlani", Schema = "UretimYonetimi")]
-    public class UYUretimPlani
+    public class ProductionPlan
     {
         public long UretimPlaniID { get; set; }
         public byte? FirmaID { get; set; }
@@ -50,8 +50,8 @@ namespace Models.Entities.Dupus.Entity.Models
         public decimal UretimKatsayisi { get; set; }
 
         public string? EklentiDosyaAdi { get; set; }
-        public Int64? SiparisDetayiID { get; set; }
-        public Int64? KesimIsEmriNo { get; set; }
+        public long? SiparisDetayiID { get; set; }
+        public long? KesimIsEmriNo { get; set; }
         public int? KonumID { get; set; }
         public bool? Planlandi { get; set; }
         public int? PlanlayanID { get; set; }
@@ -72,7 +72,7 @@ namespace Models.Entities.Dupus.Entity.Models
         public bool? YevmiyeKaydi { get; set; }
         public DateTime YevmiyeKaydiTarihi { get; set; }
         public int? YevmiyeKaydiYapanID { get; set; }
-        public Int64? YevmiyeDefteriID { get; set; }
+        public long? YevmiyeDefteriID { get; set; }
         public bool SenkronizeEdildi { get; set; }
         public DateTime SenkronizasyonTarihi { get; set; }
         public string? SenkronizasyonAciklamasi { get; set; }

@@ -1,4 +1,5 @@
-﻿using Dupus.Service.Contracts.IServiceManagers;
+﻿using Dupus.API.Controllers.BaseController;
+using Dupus.Service.Contracts.IServiceManagers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,20 +7,15 @@ namespace Dupus.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LocationController : ControllerBase
+    public class LocationController : CustomBaseController
     {
 
-        #region Members
-
-        private readonly IServiceManager _serviceManager;
-
-        #endregion
 
         #region Constructor
 
-        public LocationController(IServiceManager manager)
+        public LocationController(IServiceManager manager) : base(manager)
         {
-            _serviceManager = manager;
+          
         }
 
         #endregion
@@ -46,7 +42,7 @@ namespace Dupus.API.Controllers
         /// <param name="locationTypeId"></param>
         /// <returns></returns>
         [HttpGet("{LocationId:int}")]
-        public IActionResult GetLocationById([FromRoute(Name = "LocationId")] byte locationId)
+        public IActionResult GetLocationById([FromRoute(Name = "LocationId")] int locationId)
         {
             var entity = _serviceManager.LocationService.GetLocationById(locationId, false);
             if (entity == null)

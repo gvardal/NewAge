@@ -1,14 +1,14 @@
-﻿using Models.Entities.Dupus.Entity.Dtos;
-using Models.Entities.Dupus.Entity.Models;
+﻿using Dupus.Entity.Models.ProductionManagment;
+using Models.Entities.Dupus.Entity.Dtos;
 
 namespace ProjectServices.Dupus.Services.Contracts
 {
     public interface IWorkOrderService
     {
-        IEnumerable<UYIsEmri> GetAllWorkOrder(bool trackChanges);
-        UYIsEmri? GetWorkOrderById(int id, bool trackChanges);
-        IEnumerable<UYIsEmriDurumu> GetAllWorkOrderStatus();
-        UYIsEmriDurumu? GetWorkOrderStatusById(int id);
+        IEnumerable<WorkOrder> GetAllWorkOrder(bool trackChanges);
+        WorkOrder? GetWorkOrderById(int id, bool trackChanges);
+        IEnumerable<WorkOrderStatus> GetAllWorkOrderStatus();
+        WorkOrderStatus? GetWorkOrderStatusById(int id);
 
         #region Gantt
 

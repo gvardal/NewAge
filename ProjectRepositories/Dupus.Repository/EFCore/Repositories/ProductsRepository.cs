@@ -1,11 +1,11 @@
-﻿using Models.Entities.Dupus.Entity.Models;
-using Dupus.Repository.EFCore.RepositoryBases;
+﻿using Dupus.Repository.EFCore.RepositoryBases;
 using Dupus.Repository.EFCore.RepositoryContexts;
 using Dupus.Repository.Contracts.IRepositories;
+using Dupus.Entity.Models.ProductionManagment;
 
 namespace Dupus.Repository.EFCore.Repositories
 {
-    public class ProductsRepository : RepositoryBase<UYUrunler>, IProductsRepository
+    public class ProductsRepository : RepositoryBase<Productions>, IProductsRepository
     {
 
         #region Constructor
@@ -18,9 +18,9 @@ namespace Dupus.Repository.EFCore.Repositories
         
         #region Methods
 
-        public IQueryable<UYUrunler> GetAllProducts(bool trackChanges) => GetAll(trackChanges);
+        public IQueryable<Productions> GetAllProducts(bool trackChanges) => GetAll(trackChanges);
 
-        public UYUrunler? GetProductById(int id, bool trackChanges) => GetByCondition(x => x.UrunID == id, trackChanges).FirstOrDefault();
+        public Productions? GetProductById(int id, bool trackChanges) => GetByCondition(x => x.UrunID == id, trackChanges).FirstOrDefault();
 
         public string ProductName(int id, bool trackChanges)
         {

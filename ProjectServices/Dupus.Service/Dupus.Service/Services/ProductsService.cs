@@ -1,5 +1,5 @@
-﻿using Dupus.Repository.Contracts.IRepositoryManagers;
-using Models.Entities.Dupus.Entity.Models;
+﻿using Dupus.Entity.Models.ProductionManagment;
+using Dupus.Repository.Contracts.IRepositoryManagers;
 using ProjectServices.Dupus.Services.Contracts;
 
 namespace Dupus.Service.Services
@@ -24,9 +24,9 @@ namespace Dupus.Service.Services
 
         #region Methods
 
-        public UYUrunler? GetProductById(int id, bool trackChanges) => _repositoryManager.ProductsRepository.GetProductById(id, trackChanges);
+        public Productions? GetProductById(int id, bool trackChanges) => _repositoryManager.ProductsRepository.GetProductById(id, trackChanges);
 
-        public IEnumerable<UYUrunler> GetAllProducts(bool trackChanges) => _repositoryManager.ProductsRepository.GetAllProducts(trackChanges);
+        public IEnumerable<Productions> GetAllProducts(bool trackChanges) => _repositoryManager.ProductsRepository.GetAllProducts(trackChanges);
 
         #endregion
     }

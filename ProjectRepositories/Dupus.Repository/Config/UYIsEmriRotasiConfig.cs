@@ -1,12 +1,12 @@
-﻿using Models.Entities.Dupus.Entity.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Dupus.Entity.Models.ProductionManagment;
 
 namespace ProjectRepositories.Dupus.Repository.Config
 {
-    public class UYIsEmriRotasiConfig : IEntityTypeConfiguration<UYIsEmriRotasi>
+    public class UYIsEmriRotasiConfig : IEntityTypeConfiguration<WorkOrderRoute>
     {
-        public void Configure(EntityTypeBuilder<UYIsEmriRotasi> builder)
+        public void Configure(EntityTypeBuilder<WorkOrderRoute> builder)
         {
             builder.HasKey(p => p.IsEmriRotaID);    
         }

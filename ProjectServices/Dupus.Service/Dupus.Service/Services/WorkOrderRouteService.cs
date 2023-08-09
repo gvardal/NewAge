@@ -1,5 +1,5 @@
-﻿using Dupus.Repository.Contracts.IRepositoryManagers;
-using Models.Entities.Dupus.Entity.Models;
+﻿using Dupus.Entity.Models.ProductionManagment;
+using Dupus.Repository.Contracts.IRepositoryManagers;
 using ProjectServices.Dupus.Services.Contracts;
 
 namespace Dupus.Service.Services
@@ -23,11 +23,11 @@ namespace Dupus.Service.Services
 
         #region Methods
 
-        public IQueryable<UYIsEmriRotasi> GetAllWorkOrderRoute(bool trackChanges) => _repositoryManager.WorkOrderRouteRepository.GetAllWorkOrderRoutes(trackChanges).Take(5);
+        public IQueryable<WorkOrderRoute> GetAllWorkOrderRoute(bool trackChanges) => _repositoryManager.WorkOrderRouteRepository.GetAllWorkOrderRoutes(trackChanges).Take(5);
 
-        public IQueryable<UYIsEmriRotasi> GetWorkOrderRouteById(int isEmriRotaId, bool trackChanges) => _repositoryManager.WorkOrderRouteRepository.GetWorkOrderRouteById(isEmriRotaId, trackChanges);
+        public IQueryable<WorkOrderRoute> GetWorkOrderRouteById(int isEmriRotaId, bool trackChanges) => _repositoryManager.WorkOrderRouteRepository.GetWorkOrderRouteById(isEmriRotaId, trackChanges);
 
-        public string UpdateWorkOrderRoute(UYIsEmriRotasi isEmriRota)
+        public string UpdateWorkOrderRoute(WorkOrderRoute isEmriRota)
         {
             _repositoryManager.WorkOrderRouteRepository.UpdateWorkOrderRoute(isEmriRota);
             _repositoryManager.Save();

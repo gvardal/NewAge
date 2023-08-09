@@ -1,11 +1,11 @@
-﻿using Dupus.Repository.Contracts.IRepositories;
+﻿using Dupus.Entity.Models.ProductionManagment;
+using Dupus.Repository.Contracts.IRepositories;
 using Dupus.Repository.EFCore.RepositoryBases;
 using Dupus.Repository.EFCore.RepositoryContexts;
-using Models.Entities.Dupus.Entity.Models;
 
 namespace Dupus.Repository.EFCore.Repositories
 {
-    public class LocationRepository : RepositoryBase<UYKonum>, ILocationRepository
+    public class LocationRepository : RepositoryBase<Locations>, ILocationRepository
     {
         #region Constructor
 
@@ -17,9 +17,9 @@ namespace Dupus.Repository.EFCore.Repositories
 
         #region Methods
 
-        public IQueryable<UYKonum> GetLocationById(byte id, bool trackChanges) => GetByCondition(x => x.KonumTuruID.Equals(id), trackChanges);
+        public IQueryable<Locations> GetLocationById(int id, bool trackChanges) => GetByCondition(x => x.KonumTuruID.Equals(id), trackChanges);
 
-        public IQueryable<UYKonum> GetAllLocations(bool trackChanges) => GetAll(trackChanges);
+        public IQueryable<Locations> GetAllLocations(bool trackChanges) => GetAll(trackChanges);
 
         #endregion
 

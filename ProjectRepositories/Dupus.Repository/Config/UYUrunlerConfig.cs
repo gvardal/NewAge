@@ -1,12 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dupus.Entity.Models.ProductionManagment;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Models.Entities.Dupus.Entity.Models;
 
 namespace ProjectRepositories.Dupus.Repository.Config
 {
-    public class UYUrunlerConfig : IEntityTypeConfiguration<UYUrunler>
+    public class UYUrunlerConfig : IEntityTypeConfiguration<Productions>
     {
-        public void Configure(EntityTypeBuilder<UYUrunler> builder)
+        public void Configure(EntityTypeBuilder<Productions> builder)
         {
             builder.HasKey("UrunID");
         }

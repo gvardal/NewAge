@@ -9,5 +9,8 @@ namespace Dupus.Service.Contracts.IServiceManagers
         ILocationTypeService LocationTypeService { get; }
         ILocationService LocationService { get; }
         IProductsService ProductsService { get; }
+        IOrdersService OrdersService { get; }
+        IProductionPlanService ProductionPlanService { get; }
+
     }
 }

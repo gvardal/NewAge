@@ -1,13 +1,13 @@
-﻿using Dupus.Repository.Contracts.IRepositoryBases;
+﻿using Dupus.Entity.Models.ProductionManagment;
+using Dupus.Repository.Contracts.IRepositoryBases;
 using Models.Entities.Dupus.Entity.Dtos;
-using Models.Entities.Dupus.Entity.Models;
 
 namespace Dupus.Repository.Contracts.IRepositories
 {
-    public interface IWorkOrderRouteRepository : IRepositoryBase<UYIsEmriRotasi>
+    public interface IWorkOrderRouteRepository : IRepositoryBase<WorkOrderRoute>
     {
-        IQueryable<UYIsEmriRotasi> GetAllWorkOrderRoutes(bool trackChanges);
-        IQueryable<UYIsEmriRotasi> GetWorkOrderRouteById(int id, bool trackChanges);
-        void UpdateWorkOrderRoute(UYIsEmriRotasi workOrderRoute);
+        IQueryable<WorkOrderRoute> GetAllWorkOrderRoutes(bool trackChanges);
+        IQueryable<WorkOrderRoute> GetWorkOrderRouteById(int id, bool trackChanges);
+        void UpdateWorkOrderRoute(WorkOrderRoute workOrderRoute);
     }
 }

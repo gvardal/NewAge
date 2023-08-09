@@ -1,11 +1,11 @@
-﻿using Models.Entities.Dupus.Entity.Models;
-using Dupus.Repository.EFCore.RepositoryBases;
+﻿using Dupus.Repository.EFCore.RepositoryBases;
 using Dupus.Repository.EFCore.RepositoryContexts;
 using Dupus.Repository.Contracts.IRepositories;
+using Dupus.Entity.Models.ProductionManagment;
 
 namespace Dupus.Repository.EFCore.Repositories
 {
-    public class WorkOrderRouteRepository : RepositoryBase<UYIsEmriRotasi>, IWorkOrderRouteRepository
+    public class WorkOrderRouteRepository : RepositoryBase<WorkOrderRoute>, IWorkOrderRouteRepository
     {
         #region Constructor
 
@@ -17,15 +17,15 @@ namespace Dupus.Repository.EFCore.Repositories
 
         #region  Methods
 
-        public IQueryable<UYIsEmriRotasi> GetAllWorkOrderRoutes(bool trackChanges) => GetAll(trackChanges);
+        public IQueryable<WorkOrderRoute> GetAllWorkOrderRoutes(bool trackChanges) => GetAll(trackChanges);
 
-        public IQueryable<UYIsEmriRotasi> GetWorkOrderRouteById(int id, bool trackChanges)
+        public IQueryable<WorkOrderRoute> GetWorkOrderRouteById(int id, bool trackChanges)
         {
-            IQueryable<UYIsEmriRotasi> result = GetByCondition(x => x.IsEmriRotaID.Equals(id), trackChanges);
+            IQueryable<WorkOrderRoute> result = GetByCondition(x => x.IsEmriRotaID.Equals(id), trackChanges);
             return result;
         }
 
-        public void UpdateWorkOrderRoute(UYIsEmriRotasi workOrderRoute)
+        public void UpdateWorkOrderRoute(WorkOrderRoute workOrderRoute)
         {
             Update(workOrderRoute);
         }

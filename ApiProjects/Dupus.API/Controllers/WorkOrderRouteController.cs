@@ -1,23 +1,20 @@
-﻿using Dupus.Service.Contracts.IServiceManagers;
+﻿using Dupus.API.Controllers.BaseController;
+using Dupus.Service.Contracts.IServiceManagers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dupus.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class WorkOrderRouteController : ControllerBase
+    public class WorkOrderRouteController : CustomBaseController
     {
-        #region Members
-
-        private readonly IServiceManager _serviceManager;
-
-        #endregion
+       
 
         #region Constructor
 
-        public WorkOrderRouteController(IServiceManager manager)
+        public WorkOrderRouteController(IServiceManager manager) : base(manager)
         {
-            _serviceManager = manager;
+           
         }
 
         #endregion

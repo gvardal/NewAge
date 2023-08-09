@@ -1,11 +1,11 @@
-﻿using Models.Entities.Dupus.Entity.Models;
+﻿using Dupus.Entity.Models.ProductionManagment;
 
 namespace ProjectServices.Dupus.Services.Contracts
 {
     public interface ILocationTypeService
     {
-        IEnumerable<UYKonumTuru> GetAllLocationsType(bool trackChanges);
-        UYKonumTuru? GetLocationTypeById(int id, bool trackChanges);
+        IEnumerable<LocationsType> GetAllLocationsType(bool trackChanges);
+        LocationsType? GetLocationTypeById(int id, bool trackChanges);
 
     }
 }

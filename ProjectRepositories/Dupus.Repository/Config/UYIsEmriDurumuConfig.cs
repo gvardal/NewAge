@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Models.Entities.Dupus.Entity.Models;
+using Dupus.Entity.Models.ProductionManagment;
 
 namespace ProjectRepositories.Dupus.Repository.Config
 {
-    public class UYIsEmriDurumuConfig : IEntityTypeConfiguration<UYIsEmriDurumu>
+    public class UYIsEmriDurumuConfig : IEntityTypeConfiguration<WorkOrderStatus>
     {
-        public void Configure(EntityTypeBuilder<UYIsEmriDurumu> builder)
+        public void Configure(EntityTypeBuilder<WorkOrderStatus> builder)
         {
             builder.HasKey(k => k.IsEmriDurumId);
         }

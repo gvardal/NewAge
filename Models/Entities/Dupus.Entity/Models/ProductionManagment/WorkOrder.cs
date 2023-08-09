@@ -1,24 +1,24 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Models.Entities.Dupus.Entity.Models
+namespace Dupus.Entity.Models.ProductionManagment
 {
     [Table("UYIsEmri", Schema = "UretimYonetimi")]
-    public class UYIsEmri
+    public class WorkOrder
     {
         [Key]
         public long IsEmriID { get; set; }
         public byte? FirmaID { get; set; }
         public int? MusteriKodu { get; set; }
-        public Int64? UretimPlaniID { get; set; }
-        public UYUretimPlani? UretimPlani { get; set; }
+        public long? UretimPlaniID { get; set; }
+        public ProductionPlan? UretimPlani { get; set; }
         public int? KesimIsEmriID { get; set; }
         public decimal? KesimSuresi { get; set; }
         public decimal? KesilenMalzemeAgirligi { get; set; }
-        public Int64? UstIsEmriID { get; set; }
+        public long? UstIsEmriID { get; set; }
         public string? IsEmriKodu { get; set; }
         public int UrunID { get; set; }
-        public UYUrunler? Urun { get; set; }
+        public Productions? Urun { get; set; }
         public byte? IsEmriTuruID { get; set; }
         public string? UretimTuru { get; set; }
         public int? SiparisNo { get; set; }

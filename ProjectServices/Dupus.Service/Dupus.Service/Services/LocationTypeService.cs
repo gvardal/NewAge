@@ -1,5 +1,5 @@
-﻿using Dupus.Repository.Contracts.IRepositoryManagers;
-using Models.Entities.Dupus.Entity.Models;
+﻿using Dupus.Entity.Models.ProductionManagment;
+using Dupus.Repository.Contracts.IRepositoryManagers;
 using ProjectServices.Dupus.Services.Contracts;
 
 namespace Dupus.Service.Services
@@ -23,9 +23,9 @@ namespace Dupus.Service.Services
 
         #region Methods
 
-        public IEnumerable<UYKonumTuru> GetAllLocationsType(bool trackChanges) => _repositoryManager.LocationTypeRepository.GetAllLocationsType(trackChanges);
+        public IEnumerable<LocationsType> GetAllLocationsType(bool trackChanges) => _repositoryManager.LocationTypeRepository.GetAllLocationsType(trackChanges);
 
-        public UYKonumTuru? GetLocationTypeById(int id, bool trackChanges) => _repositoryManager.LocationTypeRepository.GetLocationTypeById(id, trackChanges).SingleOrDefault();
+        public LocationsType? GetLocationTypeById(int id, bool trackChanges) => _repositoryManager.LocationTypeRepository.GetLocationTypeById(id, trackChanges).SingleOrDefault();
 
 
         #endregion

@@ -1,21 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Models.Entities.Dupus.Entity.Models
+namespace Dupus.Entity.Models.ProductionManagment
 {
     [Table("UYIsEmriRotasi", Schema = "UretimYonetimi")]
-    public class UYIsEmriRotasi
+    public class WorkOrderRoute
     {
         public int IsEmriRotaID { get; set; }
         public long IsEmriID { get; set; }
-        public UYIsEmri? IsEmri { get; set; }
+        public WorkOrder? IsEmri { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public string? OperasyonuKodu { get; set; }
         public int? OncekiIsEmriRotaID { get; set; }
         public byte Sira { get; set; }
         public int KonumID { get; set; }
-        public UYKonum? Konum { get; set; }
-        public Int16 IslemTuruID { get; set; }
+        public Locations? Konum { get; set; }
+        public short IslemTuruID { get; set; }
         public int? CalisanID { get; set; }
 
         [Column(TypeName = "decimal(4, 2)")]
@@ -27,12 +27,12 @@ namespace Models.Entities.Dupus.Entity.Models
         public DateTime PlanlananBaslamaTarihi { get; set; }
         public DateTime PlanlananBitisTarihi { get; set; }
         public DateTime? EnErkenBaslamaTarihi { get; set; }
-        public bool? Sabitlenmis { get; set; }        
-        public Single? PlanlananTamamlanmaZamani { get; set; }
-        public Single? HazirlamaSuresi { get; set; }
-        public Single? IslemSuresi { get; set; }
-        public Single? StandartSure { get; set; }
-        public Single? Mesafe { get; set; }
+        public bool? Sabitlenmis { get; set; }
+        public float? PlanlananTamamlanmaZamani { get; set; }
+        public float? HazirlamaSuresi { get; set; }
+        public float? IslemSuresi { get; set; }
+        public float? StandartSure { get; set; }
+        public float? Mesafe { get; set; }
         public int? OnSeriKontrolAdedi { get; set; }
         [Column(TypeName = "decimal(12, 4)")]
         public decimal? LotBuyuklugu { get; set; }
@@ -40,21 +40,21 @@ namespace Models.Entities.Dupus.Entity.Models
         public decimal OrtalamaCevrimSuresi { get; set; }
         public DateTime? SonCevrimZamani { get; set; }
         public decimal? GerceklesenCikti { get; set; }
-        public Int16? Fire { get; set; }
+        public short? Fire { get; set; }
         public decimal? TamamlanmaOrani { get; set; }
         public string? VardiyaKodu { get; set; } = string.Empty;
 
         [Column(TypeName = "numeric(8, 2)")]
         public decimal? SonVardiyaMiktari { get; set; }
-        public Int16 GozSayisi { get; set; }
+        public short GozSayisi { get; set; }
         public DateTime? GerceklesenBaslamaTarihi { get; set; }
         public DateTime? GerceklesenBitisTarihi { get; set; }
 
         [Column(TypeName = "numeric(16, 2)")]
         public decimal? GerceklesenTamamlanmaZamani { get; set; }
-        public Int16? IsAkisSoruGrubuID { get; set; }
-        public Int16? IsAkisSoruGrubuIDAra { get; set; }
-        public Int16? IsAkisSoruGrubuIDSon { get; set; }
+        public short? IsAkisSoruGrubuID { get; set; }
+        public short? IsAkisSoruGrubuIDAra { get; set; }
+        public short? IsAkisSoruGrubuIDSon { get; set; }
         public string? KaliteKontrolRaporu { get; set; }
         public bool? Tamamlandi { get; set; }
         public decimal? SaatlikUcreti { get; set; }
@@ -69,8 +69,8 @@ namespace Models.Entities.Dupus.Entity.Models
         public int? YevmiyeKaydiID { get; set; }
         public bool TopluKayit { get; set; }
         public bool? ManuelIsciZamanKarti { get; set; }
-        public Int64? EnvanterID { get; set; }
-        public Int64? UretimVerisiID { get; set; }
+        public long? EnvanterID { get; set; }
+        public long? UretimVerisiID { get; set; }
         public int? PaletNo { get; set; }
         public int? KutuNo { get; set; }
         public bool OtomatikDurus { get; set; }

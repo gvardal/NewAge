@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Models.Entities.Dupus.Entity.Models
+namespace Dupus.Entity.Models.ProductionManagment
 {
     [Table("UYKonum", Schema = "UretimYonetimi")]
-    public class UYKonum
+    public class Locations
     {
         public int KonumID { get; set; }
         public byte? FirmaID { get; set; }

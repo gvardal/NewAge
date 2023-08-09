@@ -1,6 +1,6 @@
-﻿using Dupus.Repository.Contracts.IRepositoryManagers;
+﻿using Dupus.Entity.Models.ProductionManagment;
+using Dupus.Repository.Contracts.IRepositoryManagers;
 using Models.Entities.Dupus.Entity.Dtos;
-using Models.Entities.Dupus.Entity.Models;
 using ProjectServices.Dupus.Services.Contracts;
 
 namespace Dupus.Service.Services
@@ -24,13 +24,13 @@ namespace Dupus.Service.Services
 
         #region Methods
 
-        public IEnumerable<UYIsEmri> GetAllWorkOrder(bool trackChanges) => _repositoryManager.WorkOrderRepository.GetAllWorkOrder(trackChanges).Take(5);
+        public IEnumerable<WorkOrder> GetAllWorkOrder(bool trackChanges) => _repositoryManager.WorkOrderRepository.GetAllWorkOrder(trackChanges).Take(5);
 
-        public UYIsEmri? GetWorkOrderById(int id, bool trackChanges) => _repositoryManager.WorkOrderRepository.GetWorkOrderById(id, trackChanges).SingleOrDefault();
+        public WorkOrder? GetWorkOrderById(int id, bool trackChanges) => _repositoryManager.WorkOrderRepository.GetWorkOrderById(id, trackChanges).SingleOrDefault();
 
-        public IEnumerable<UYIsEmriDurumu> GetAllWorkOrderStatus() => _repositoryManager.WorkOrderRepository.GetAllWorkOrderStatus();
+        public IEnumerable<WorkOrderStatus> GetAllWorkOrderStatus() => _repositoryManager.WorkOrderRepository.GetAllWorkOrderStatus();
 
-        public UYIsEmriDurumu? GetWorkOrderStatusById(int id) => _repositoryManager.WorkOrderRepository.GetWorkOrderStatusById(id);
+        public WorkOrderStatus? GetWorkOrderStatusById(int id) => _repositoryManager.WorkOrderRepository.GetWorkOrderStatusById(id);
 
         #region Gantt
 

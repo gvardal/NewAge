@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Models.Entities.Dupus.Entity.Models
+namespace Dupus.Entity.Models.ProductionManagment
 {
     [Table("P_UYIsEmriDurumu", Schema = "SistemAyarlari")]
-    public class UYIsEmriDurumu
+    public class WorkOrderStatus
     {
         public byte IsEmriDurumId { get; set; }
         public string? Durum { get; set; }

@@ -1,12 +1,12 @@
-﻿using Models.Entities.Dupus.Entity.Models;
+﻿using Dupus.Entity.Models.ProductionManagment;
 
 namespace ProjectServices.Dupus.Services.Contracts
 {
     public interface IWorkOrderRouteService
     {
-        IQueryable<UYIsEmriRotasi> GetAllWorkOrderRoute(bool trackChanges);
-        IQueryable<UYIsEmriRotasi> GetWorkOrderRouteById(int workOrderRouteId, bool trackChanges);
-        string UpdateWorkOrderRoute(UYIsEmriRotasi workOrderRoute);
+        IQueryable<WorkOrderRoute> GetAllWorkOrderRoute(bool trackChanges);
+        IQueryable<WorkOrderRoute> GetWorkOrderRouteById(int workOrderRouteId, bool trackChanges);
+        string UpdateWorkOrderRoute(WorkOrderRoute workOrderRoute);
 
     }
 }

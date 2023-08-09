@@ -1,12 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dupus.Entity.Models.ProductionManagment;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Models.Entities.Dupus.Entity.Models;
 
 namespace ProjectRepositories.Dupus.Repository.Config
 {
-    public class UYIsEmriConfig : IEntityTypeConfiguration<UYIsEmri>
+    public class UYIsEmriConfig : IEntityTypeConfiguration<WorkOrder>
     {
-        public void Configure(EntityTypeBuilder<UYIsEmri> builder)
+        public void Configure(EntityTypeBuilder<WorkOrder> builder)
         {
             builder.HasKey(p => p.IsEmriID);
         }

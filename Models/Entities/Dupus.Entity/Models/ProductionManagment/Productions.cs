@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Models.Entities.Dupus.Entity.Models
+namespace Dupus.Entity.Models.ProductionManagment
 {
     [Table("UYUrunler", Schema = "UretimYonetimi")]
-    public class UYUrunler
+    public class Productions
     {
         [Key]
         public int UrunID { get; set; }
@@ -19,8 +19,8 @@ namespace Models.Entities.Dupus.Entity.Models
         public string? Teknik3 { get; set; }
         public string? Etiketler { get; set; }
         public int? UrunKategorisiID { get; set; }
-        public Int16? UrunMarkasiID { get; set; }
-        public Int16? UrunGrubuID { get; set; }
+        public short? UrunMarkasiID { get; set; }
+        public short? UrunGrubuID { get; set; }
         public string? GTIPKodu { get; set; }
         public byte[]? UrunResim { get; set; }
         public string? UrunTeknikDokumani { get; set; }
@@ -38,7 +38,7 @@ namespace Models.Entities.Dupus.Entity.Models
         public decimal? GuvenlikStogu { get; set; }
         public decimal? SiparisMiktari { get; set; }
         public decimal? LotBuyuklugu { get; set; }
-        public Int16? OlcuBirimiTuruID { get; set; }
+        public short? OlcuBirimiTuruID { get; set; }
         public decimal? UretimOlcuKatsayisi { get; set; }
         public int? UretimOlcuBirimiID { get; set; }
         public decimal? IIUretimOlcuKatsayisi { get; set; }
@@ -57,15 +57,15 @@ namespace Models.Entities.Dupus.Entity.Models
         public decimal? FasonIslemMaliyeti { get; set; }
         public decimal? GenelUretimMaliyeti { get; set; }
         public double? GenelUretimMaliyetParametresi { get; set; }
-        public Int16? MaliyetTuketimOmru { get; set; }
+        public short? MaliyetTuketimOmru { get; set; }
         public decimal? FiiliMaliyet { get; set; }
         public decimal? FiiliIlkMaddeMalzemeMaliyeti { get; set; }
         public decimal? FiiliDirekIscilikMaliyeti { get; set; }
         public decimal? FiiliEkipmanKullanimMaliyeti { get; set; }
         public decimal? FiiliFasonIslemMaliyeti { get; set; }
         public decimal? FiiliGenelUretimMaliyeti { get; set; }
-        public Int16? GirdiKaliteKontrolSoruGrubuID { get; set; }
-        public Int16? CikisKaliteKontrolSoruGrubuID { get; set; }
+        public short? GirdiKaliteKontrolSoruGrubuID { get; set; }
+        public short? CikisKaliteKontrolSoruGrubuID { get; set; }
         public decimal? MinSatisFiyati { get; set; }
         public decimal? NumuneFiyati { get; set; }
         public decimal? ListeFiyati { get; set; }
@@ -76,7 +76,7 @@ namespace Models.Entities.Dupus.Entity.Models
         public byte? KDVOrani { get; set; }
         public byte? TevkifatOrani { get; set; }
         public double? IskontoOrani { get; set; }
-        public Int16? KarOrani { get; set; }
+        public short? KarOrani { get; set; }
         public decimal? KomisyonOrani { get; set; }
         public decimal? UrunKatsayisi { get; set; }
         public int? YDSatisMuhasebeHesapID { get; set; }
@@ -138,7 +138,7 @@ namespace Models.Entities.Dupus.Entity.Models
         public int? DevamUrunuID { get; set; }
         public DateTime? SonGuncellemeTarihi { get; set; }
         public string? ABCSinifi { get; set; }
-        public Int16? KKDIlgiliOrganID { get; set; }
+        public short? KKDIlgiliOrganID { get; set; }
         public string? SDOHash { get; set; }
         public string? SDOCriticalHash { get; set; }
         public int? SablonUrunID { get; set; }

@@ -9,6 +9,8 @@ namespace Dupus.Repository.Contracts.IRepositoryManagers
         ILocationTypeRepository LocationTypeRepository { get; }
         ILocationRepository LocationRepository { get; }
         IProductsRepository ProductsRepository { get; }
+        IOrdersRepository OrdersRepository { get; }
+        IProductionPlanRepository ProductionPlanRepository { get; }
         void Save();
     }
 }

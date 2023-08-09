@@ -14,7 +14,6 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 // Service Extensions
 builder.Services.ConfigureSqlContext(builder.Configuration);
-builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 var app = builder.Build();
 

@@ -1,12 +1,12 @@
-﻿using Dupus.Repository.Contracts.IRepositoryBases;
-using Models.Entities.Dupus.Entity.Models;
+﻿using Dupus.Entity.Models.ProductionManagment;
+using Dupus.Repository.Contracts.IRepositoryBases;
 
 namespace Dupus.Repository.Contracts.IRepositories
 {
-    public interface ILocationTypeRepository : IRepositoryBase<UYKonumTuru>
+    public interface ILocationTypeRepository : IRepositoryBase<LocationsType>
     {
-        IQueryable<UYKonumTuru> GetAllLocationsType(bool trackChanges);
-        IQueryable<UYKonumTuru> GetLocationTypeById(int id, bool trackChanges);
+        IQueryable<LocationsType> GetAllLocationsType(bool trackChanges);
+        IQueryable<LocationsType> GetLocationTypeById(int id, bool trackChanges);
 
     }
 }
