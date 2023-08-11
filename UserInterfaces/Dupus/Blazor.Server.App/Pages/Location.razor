@@ -1,26 +1,12 @@
 ﻿@page "/location"
 
 <PageTitle>Weekly Plan</PageTitle>
-@using Dupus.API.Controllers;
-@using Dupus.Entity.Models.ProductionManagment;
-@using Syncfusion.Blazor.DropDowns
-@using Syncfusion.Blazor.Grids
-@using Syncfusion.Blazor.Lists
-@using Syncfusion.Blazor.Data
-@using Syncfusion.Blazor;
-@using System.Collections.ObjectModel;
-@using System.Text.Json;
-@using static System.Net.WebRequestMethods;
-@inject HttpClient http;
-@using Extensions
-
-
 
 <SfListView HeaderTitle="Locations" ShowHeader="true" TValue="Locations">
     <ListViewFieldSettings TValue="Locations" Id="KonumID" Text="KonumID"></ListViewFieldSettings>
     <ListViewFieldSettings TValue="Locations" Id="KonumKodu" Text="KonumKodu"></ListViewFieldSettings>
     <ListViewFieldSettings TValue="Locations" Id="Ad" Text="Ad"></ListViewFieldSettings>
-    <SfDataManager Url="@Path.Combine(ApiService.GetHttpClient() ,"api/Location")" Adaptor="Adaptors.WebApiAdaptor"></SfDataManager>
+    <SfDataManager Url="@Path.Combine(ApiService.GetHttpClient() ,"api/Location/LocationTypeId/21")" Adaptor="Adaptors.WebApiAdaptor"></SfDataManager>
 </SfListView>
 
 

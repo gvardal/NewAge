@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components;
 using System.Net.Http;
 using static System.Net.WebRequestMethods;
 
-namespace Blazor.Server.App.Extensions
+namespace Dupus.UI.Extensions
 {
     public static class ApiService
     {

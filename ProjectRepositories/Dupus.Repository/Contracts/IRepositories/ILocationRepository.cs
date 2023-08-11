@@ -7,5 +7,6 @@ namespace Dupus.Repository.Contracts.IRepositories
     {
         IQueryable<Locations> GetAllLocations(bool trackChanges);
         IQueryable<Locations> GetLocationById(int id, bool trackChanges);
+        IQueryable<Locations> GetLocationByLocationTypeId(int id, bool trackChanges);
     }
 }

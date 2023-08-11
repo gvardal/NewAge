@@ -32,11 +32,12 @@ namespace Dupus.Service.Services
 
 
         public IEnumerable<Locations> GetLocationById(int id, bool trackChanges) => _repositoryManager.LocationRepository.GetLocationById(id, trackChanges);
+        public IEnumerable<Locations> GetLocationByLocationTypeId(int id, bool trackChanges) => _repositoryManager.LocationRepository.GetLocationByLocationTypeId(id, trackChanges);
 
 
         public IEnumerable<GanttResourceGroupDto> GanttResourceGroup(byte id, bool trackChanges)
         {
-            var locationList = _repositoryManager.LocationRepository.GetLocationById(id, trackChanges);
+            var locationList = _repositoryManager.LocationRepository.GetLocationByLocationTypeId(id, trackChanges);
             var resourceGroup = _mapper.Map<List<GanttResourceGroupDto>>(locationList);
             return resourceGroup;
         }

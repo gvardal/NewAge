@@ -1,6 +1,5 @@
-
-using Blazor.Server.App.Extensions;
 using BlazorBootstrap;
+using Dupus.UI.Extensions;
 using MudBlazor.Services;
 using Syncfusion.Blazor;
 

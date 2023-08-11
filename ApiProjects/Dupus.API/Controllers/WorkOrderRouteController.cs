@@ -1,4 +1,5 @@
 ﻿using Dupus.API.Controllers.BaseController;
+using Dupus.Entity.Models.ProductionManagment;
 using Dupus.Service.Contracts.IServiceManagers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,9 +30,8 @@ namespace Dupus.API.Controllers
         public IActionResult GetAllWorkOrderRoutes()
         {
             var entity = _serviceManager.WorkOrderRouteService.GetAllWorkOrderRoute(false).Take(10);
-            if (entity == null)
-                return NotFound();
-            return Ok(entity);
+            return CheckEntityResult(entity);
+
         }
 
         /// <summary>
@@ -39,15 +39,23 @@ namespace Dupus.API.Controllers
         /// </summary>
         /// <param name="workOrderRouteId"></param>
         /// <returns></returns>
-        [HttpGet("{workOrderRouteId:int}")]
-        public IActionResult GetWorkOrderRouteById([FromRoute(Name = "workOrderRouteId")] int workOrderRouteId)
+        [HttpGet("WorkOrderRouteById/{id}")]
+        public IActionResult GetWorkOrderRouteById([FromRoute(Name = "id")] int id)
         {
-            var entity = _serviceManager.WorkOrderRouteService.GetWorkOrderRouteById(workOrderRouteId, false);
+            var entity = _serviceManager.WorkOrderRouteService.GetWorkOrderRouteById(id, false);
+            return CheckEntityResult(entity);
+
+        }
+
+        [HttpPut("")]
+        public IActionResult UpdateWorkOrderRoute(WorkOrderRoute item)
+        {
+            var entity = _serviceManager.WorkOrderRouteService.UpdateWorkOrderRoute(item);
             if (entity == null)
                 return NotFound();
             return Ok(entity);
-        }
 
+        }
         #endregion
     }
 }

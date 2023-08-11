@@ -1,0 +1,142 @@
+﻿@page "/weeklyplans"
+
+<PageTitle>Weekly Plan</PageTitle>
+
+<div class="row">
+    <div class="col-2">
+        <SfListBox TValue="string[]" DataSource="@ResourcesList" TItem="ResourceListDto" @ref="ListBoxObj" @bind-Value="@Value"
+                   onclick="@(()=> Mouse_OnClick())">
+            <ListBoxFieldSettings Text="Text" Value="Id" />
+            <ListBoxEvents TValue="string[]" ValueChange="change" TItem="ResourceListDto"></ListBoxEvents>
+            <ListBoxSelectionSettings Mode="Syncfusion.Blazor.DropDowns.SelectionMode.Single"></ListBoxSelectionSettings>
+        </SfListBox>
+    </div>
+    <div class="col-10">
+        <div>
+            @if (!string.IsNullOrEmpty(SelectedResource))
+            {
+                <SfMessage CssClass="mb-2" ShowIcon="false">@SelectedResource</SfMessage>
+            }
+            else
+            {
+                <SfMessage CssClass="mb-2" ShowIcon="false">Please select resource to view weekly plan.</SfMessage>
+            }
+        </div>
+        <SfSchedule TValue=WeeklyPlanDto Height="750px" @bind-SelectedDate="@CurrentDate" EnableAdaptiveUI ShowQuickInfo ShowWeekNumber>
+            <ScheduleEvents TValue="WeeklyPlanDto" ActionCompleted="OnActionCompleted"></ScheduleEvents>
+            <ScheduleEventSettings DataSource="@DataSource"></ScheduleEventSettings>
+            <ScheduleViews>
+                <ScheduleView Option="View.Day"></ScheduleView>
+                <ScheduleView Option="View.Week"></ScheduleView>
+                <ScheduleView Option="View.WorkWeek"></ScheduleView>
+                <ScheduleView Option="View.Month"></ScheduleView>
+                <ScheduleView Option="View.Agenda"></ScheduleView>
+            </ScheduleViews>
+        </SfSchedule>
+    </div>
+</div>
+
+
+
+@code {
+
+    SfListBox<string[], ResourceListDto> ListBoxObj;
+    DateTime CurrentDate = DateTime.Now;
+
+    private string SelectedResource { get; set; } = string.Empty;
+    private string? SelectedResourceId { get; set; }
+    private string[] Value = new string[] { };
+    private List<ResourceListDto> ResourcesList = new List<ResourceListDto>();
+    private List<WeeklyPlanDto> DataSource = new List<WeeklyPlanDto>();
+
+
+    protected override void OnInitialized()
+    {
+        var response = http.GetAsync($"{ApiService.GetHttpClient()}api/{ControllerNameManager.Instance.GetControllerName(nameof(LocationController))}/GantResource/21");
+        var content = response.Result.Content.ReadAsStringAsync();
+        var data = JsonSerializer.Deserialize<IEnumerable<GanttResourceGroupDto>>(content.Result, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        var resources = data;
+        if (response.IsCompletedSuccessfully && resources != null)
+        {
+            foreach (var resource in resources)
+            {
+                ResourcesList.Add(new ResourceListDto
+                    {
+                        Id = resource.KonumID.ToString(),
+                        Text = resource.Ad,
+                    });
+            }
+        }
+    }
+
+    private void Mouse_OnClick()
+    {
+        var Values = ListBoxObj.GetDataByValue(Value);
+        if (Values != null && Values.Count != 0)
+        {
+            SelectedResource = Values.First().Text!;
+
+            var response = http.GetAsync($"{ApiService.GetHttpClient()}api/{ControllerNameManager.Instance.GetControllerName(nameof(WorkOrdersController))}/WeeklyPlanWorkOrdersById/{SelectedResourceId!}");
+            var content = response.Result.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<IEnumerable<WeeklyPlanDto>>(content.Result, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            //var result = http.GetFromJsonAsync<> _manager.IsEmriService.GetWeeklyPlanWorkOrders(SelectedResourceId!);
+        }
+
+    }
+
+    private void change(ListBoxChangeEventArgs<string[], ResourceListDto> args)
+    {
+        if (args.Value != null)
+        {
+            SelectedResourceId = args.Value.First();
+            var response = http.GetAsync($"{ApiService.GetHttpClient()}api/{ControllerNameManager.Instance.GetControllerName(nameof(WorkOrdersController))}/WeeklyPlanWorkOrdersById/{SelectedResourceId}");
+            var content = response.Result.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<IEnumerable<WeeklyPlanDto>>(content.Result, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            if (result != null && result.Count() != 0)
+                DataSource = result.ToList();
+        }
+    }
+
+    public void OnActionCompleted(Syncfusion.Blazor.Schedule.ActionEventArgs<WeeklyPlanDto> args)
+    {
+        if (args.ActionType == ActionType.EventChange)
+        {
+            if (args.ChangedRecords.Count > 0)
+            {
+                foreach (var cwo in args.ChangedRecords)
+                {
+
+                    var response = http.GetAsync($"{ApiService.GetHttpClient()}api/{ControllerNameManager.Instance.GetControllerName(nameof(WorkOrderRouteController))}/WorkOrderRouteById/{cwo.Id}");
+
+                    var content = response.Result.Content.ReadAsStringAsync();
+                    var result = JsonSerializer.Deserialize<IEnumerable<WorkOrderRoute>>(content.Result, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }).FirstOrDefault();
+
+
+
+                    //WorkOrderRoute? rotaBilgisi = _manager.IsEmriRotaService.GetIsEmriRotaById(cwo.Id, true).FirstOrDefault();
+                    if (result != null)
+                    {
+                        TimeSpan ts = cwo.EndTime - cwo.StartTime;
+                        result.PlanlananBaslamaTarihi = cwo.StartTime;
+                        result.PlanlananBitisTarihi = cwo.EndTime;
+                        result.PlanlananTamamlanmaZamani = Convert.ToSingle(ts.TotalSeconds);
+                        result.DuzenleyenCalisanID = 6;
+                        result.DuzenlemeTarihi = DateTime.Now;
+                        result.SonErisenCalisanID = 6;
+                        result.SonErisimTarihi = DateTime.Now;
+
+                        Console.ForegroundColor = ConsoleColor.Red;
+
+                        var upd = http.PutAsJsonAsync<WorkOrderRoute>($"{ApiService.GetHttpClient()}api/{ControllerNameManager.Instance.GetControllerName(nameof(WorkOrderRouteController))}", result).Result;
+
+                        //Console.WriteLine(_manager.IsEmriRotaService.updateIsEmriRotasi(rotaBilgisi));
+                        Console.WriteLine(upd);
+                        Console.ResetColor();
+                    }
+                }
+            }
+        }
+    }
+}

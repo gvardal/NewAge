@@ -7,6 +7,8 @@ namespace ProjectServices.Dupus.Services.Contracts
     {
         IEnumerable<Locations> GetAllLocations(bool trackChanges);
         IEnumerable<Locations> GetLocationById(int id, bool trackChanges);
+        IEnumerable<Locations> GetLocationByLocationTypeId(int id, bool trackChanges);
+
         IEnumerable<GanttResourceGroupDto> GanttResourceGroup(byte id, bool trackChanges);        
     }
 }

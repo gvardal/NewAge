@@ -26,14 +26,12 @@ namespace Dupus.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("WorkOrderList")]
+        //[Route("WorkOrderList")]
         public IActionResult GetAllWorkOrder()
         {
-            
+
             var entity = _serviceManager.WorkOrderService.GetAllWorkOrder(false).Take(50);
-            if (entity == null)
-                return NotFound();
-            return Ok(entity);
+            return CheckEntityResult(entity);
         }
 
         /// <summary>
@@ -42,13 +40,12 @@ namespace Dupus.API.Controllers
         /// <param name="workOrderId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("WorkOrderListById")]
-        public IActionResult GetWorkOrderById(int workOrderId = 999999)
+        [Route("WorkOrderListById/{id}")]
+        public IActionResult? GetWorkOrderById(int id = 999999)
         {
-            var entity = _serviceManager.WorkOrderService.GetWorkOrderById(workOrderId, false);
-            if (entity == null)
-                return NotFound();
-            return Ok(entity);
+            var entity = _serviceManager.WorkOrderService.GetWorkOrderById(id, false);
+            return CheckEntityResult(entity) as IActionResult;
+
         }
 
         /// <summary>
@@ -60,9 +57,8 @@ namespace Dupus.API.Controllers
         public IActionResult GetAllWorkOrderStatus()
         {
             var entity = _serviceManager.WorkOrderService.GetAllWorkOrderStatus();
-            if (entity == null)
-                return NotFound();
-            return Ok(entity);
+            return CheckEntityResult(entity);
+
         }
 
         /// <summary>
@@ -71,14 +67,23 @@ namespace Dupus.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("WorkOrderStatusById")]
-        public IActionResult GetWorkOrderStatusById([FromQuery] int id)
+        [Route("WorkOrderStatusById/{id}")]
+        public IActionResult? GetWorkOrderStatusById([FromQuery] int id)
         {
             var entity = _serviceManager.WorkOrderService.GetWorkOrderStatusById(id);
-            if (entity == null)
-                return NotFound();
-            return Ok(entity);
+            return CheckEntityResult(entity) as IActionResult;
+
         }
+
+        [HttpGet]
+        [Route("WeeklyPlanWorkOrdersById/{id}")]
+        public IActionResult GetWeeklyPlanWorkOrders([FromRoute(Name = "id")] string id)
+        {
+            var entity = _serviceManager.WorkOrderService.GetWeeklyPlanWorkOrders(id);
+            return CheckEntityResult(entity);
+
+        }
+
 
         #endregion
     }

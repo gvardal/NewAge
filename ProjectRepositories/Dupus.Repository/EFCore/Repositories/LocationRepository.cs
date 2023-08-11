@@ -17,9 +17,11 @@ namespace Dupus.Repository.EFCore.Repositories
 
         #region Methods
 
-        public IQueryable<Locations> GetLocationById(int id, bool trackChanges) => GetByCondition(x => x.KonumTuruID.Equals(id), trackChanges);
+        public IQueryable<Locations> GetLocationById(int id, bool trackChanges) => GetByCondition(x => x.KonumID.Equals(id), trackChanges);
 
         public IQueryable<Locations> GetAllLocations(bool trackChanges) => GetAll(trackChanges);
+
+        public IQueryable<Locations> GetLocationByLocationTypeId(int id, bool trackChanges) => GetByCondition(x => x.KonumTuruID == id, trackChanges);
 
         #endregion
 
