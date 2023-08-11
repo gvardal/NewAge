@@ -14,6 +14,9 @@
     </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
-      <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.3" />
-</ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UserInterfaces\Dupus\Blazor.Server.App\" />
+  </ItemGroup>
 </Project>

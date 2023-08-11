@@ -27,12 +27,12 @@ namespace Dupus.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult GetAllLocations()
+        public object? GetAllLocations()
         {
             var entity = _serviceManager.LocationService.GetAllLocations(false).Take(5);
             if (entity == null)
                 return NotFound();
-            return Ok(entity);
+            return Ok(entity).Value;
         }
 
 

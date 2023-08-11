@@ -1,0 +1,45 @@
+﻿@page "/workorders"
+
+<PageTitle>Weekly Plan</PageTitle>
+@using Dupus.API.Controllers;
+@using Dupus.Entity.Models.ProductionManagment;
+@using MudBlazor;
+@using System.Collections.ObjectModel;
+@using System.Text.Json;
+@inject HttpClient http;
+@using Syncfusion.Blazor.Grids
+
+
+
+<SfGrid DataSource="@workOrders" Width="645" AllowResizing="true">
+    <GridColumns>
+        <GridColumn Field=@nameof(WorkOrder.IsEmriID) HeaderText="ID" Width="60"></GridColumn>
+        <GridColumn Field=@nameof(WorkOrder.FirmaID) HeaderText="Firma Id" Width="120"></GridColumn>
+        <GridColumn Field=@nameof(WorkOrder.MusteriKodu) HeaderText="Musteri Kodu" Width="120"></GridColumn>
+        <GridColumn Field=@nameof(WorkOrder.BaslangicTarihi) HeaderText="Baslangic Tarihi" Type="ColumnType.DateTime" Width="120"></GridColumn>
+        <GridColumn Field=@nameof(WorkOrder.BitisTarihi) HeaderText="BitisTarihi" Type="ColumnType.DateTime" Width="120"></GridColumn>
+    </GridColumns>
+</SfGrid>
+
+
+@code {
+
+
+    ObservableCollection<WorkOrder> workOrders = new();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        ObservableCollection<WorkOrder>? list = new();
+
+        var response = http.GetAsync("api/WorkOrders/WorkOrderList", HttpCompletionOption.ResponseContentRead);
+        if (response.Result.IsSuccessStatusCode)
+        {
+            list = JsonSerializer.Deserialize<ObservableCollection<WorkOrder>>(response.Result.Content.ReadAsStream(),
+            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+
+        workOrders = list;
+    }
+
+}

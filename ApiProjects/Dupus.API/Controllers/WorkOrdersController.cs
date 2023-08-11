@@ -29,6 +29,7 @@ namespace Dupus.API.Controllers
         [Route("WorkOrderList")]
         public IActionResult GetAllWorkOrder()
         {
+            
             var entity = _serviceManager.WorkOrderService.GetAllWorkOrder(false).Take(50);
             if (entity == null)
                 return NotFound();

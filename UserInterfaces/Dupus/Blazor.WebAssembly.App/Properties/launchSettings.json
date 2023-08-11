@@ -1,21 +1,19 @@
-﻿{
-  "$schema": "https://json.schemastore.org/launchsettings.json",
+{
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:16577",
-      "sslPort": 44398
+      "applicationUrl": "http://localhost:30467",
+      "sslPort": 44399
     }
   },
   "profiles": {
-    "Dupus.API": {
+    "Blazor.WebAssembly.App": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": false,
-      //"launchBrowser": true,
-      //"launchUrl": "swagger",
-      "applicationUrl": "http://localhost:5234",
+      "launchBrowser": true,
+      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+      "applicationUrl": "https://localhost:7048;http://localhost:5106",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -23,7 +21,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "swagger",
+      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
