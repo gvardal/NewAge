@@ -1,0 +1,116 @@
+﻿@page "/workordergantt"
+
+<PageTitle>Work Orders</PageTitle>
+
+<div class="row">
+    <SfGantt DataSource="@TaskCollection" Height="750px" EnableRowVirtualization ShowColumnMenu AllowFiltering AllowSelection HighlightWeekends
+              ScrollToTaskbarOnClick Toolbar="@(new List<string>() {"Edit","Search", "CollapseAll", "ExpandAll" })">
+        <GanttTaskFields Id="TaskId" Name="TaskName" StartDate="StartDate" EndDate="EndDate" Duration="Duration" DurationUnit="DurationUnit"
+                         Progress="Progress" ParentID="ParentId" ResourceInfo="Resources">
+        </GanttTaskFields>
+        <GanttSplitterSettings ColumnIndex="5"></GanttSplitterSettings>
+        <GanttColumns>
+            <GanttColumn Field="TaskId" HeaderText="Plan Id" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" Width="125"></GanttColumn>
+            <GanttColumn Field="TaskName" HeaderText="Task Name" Width="350"></GanttColumn>
+            <GanttColumn Field="StartDate" HeaderText="Start Date" Format="dd.MM.yyy" Width="125"></GanttColumn>
+            <GanttColumn Field="Duration" HeaderText="Duration" Width="125"></GanttColumn>
+            <GanttColumn Field="Progress" HeaderText="Progress" Width="125" Format="F2"></GanttColumn>
+        </GanttColumns>
+
+        <GanttResourceFields Group="ResourceGroup" Resources="@ResourceCollection" Id="ResourceId" Name="ResourceName" Unit="Unit"
+                             TResources="ResourceData"></GanttResourceFields>
+        <GanttLabelSettings RightLabel="Resources" TaskLabel="Progress" TValue="TaskData"></GanttLabelSettings>
+
+        <GanttEditSettings AllowEditing="true" AllowTaskbarEditing="true"></GanttEditSettings>
+        <GanttTimelineSettings>
+            <GanttTopTierSettings Unit="TimelineViewMode.Month" Format="MMM"></GanttTopTierSettings>
+            <GanttBottomTierSettings Unit="TimelineViewMode.Day"></GanttBottomTierSettings>
+        </GanttTimelineSettings>
+    </SfGantt>
+</div>
+
+@code {
+    private List<TaskData>? TaskCollection = new();
+    private List<ResourceData>? ResourceCollection { get; set; }
+
+    public List<ResourceData> GanttResources()
+    {
+        List<ResourceData> GanttResourcesCollection = new List<ResourceData>();
+        //var content = ApiService.GetAsync($"api/{ControllerNameManager.Instance.GetControllerName(nameof(LocationController))}/GantResource/21");
+
+        //if (string.IsNullOrEmpty(content))
+        //    return new List<ResourceData>();
+        //var data = JsonSerializer.Deserialize<IEnumerable<GanttResourceGroupDto>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+
+        var resources = ApiService.GetAsync<IEnumerable<GanttResourceGroupDto>>($"api/{ControllerNameManager.Instance.GetControllerName(nameof(LocationController))}/GantResource/21"); ;
+        if (resources != null)
+        {
+            foreach (var resource in resources)
+            {
+                GanttResourcesCollection.Add(new ResourceData
+                    {
+                        ResourceId = resource.KonumID,
+                        ResourceName = resource.Ad!,
+                    });
+            }
+        }
+        return GanttResourcesCollection;
+    }
+
+    protected override void OnInitialized()
+    {
+        TaskCollection = GetWorkOrders();
+        ResourceCollection = GanttResources();
+    }
+
+    private List<TaskData> GetWorkOrders()
+    {
+        List<TaskData> TaskCollection = new List<TaskData>();
+
+        //var content = ApiService.GetAsync($"api/{ControllerNameManager.Instance.GetControllerName(nameof(WorkOrdersController))}/GanttProductPlan");
+
+        //if (string.IsNullOrEmpty(content))
+        //    return new List<TaskData>();
+        //var data = JsonSerializer.Deserialize<IEnumerable<TaskData>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        var data = ApiService.GetAsync<IEnumerable<TaskData>>($"api/{ControllerNameManager.Instance.GetControllerName(nameof(WorkOrdersController))}/GanttProductPlan"); ;
+
+        if (data is not null)
+        {
+            foreach (var plan in data)
+            {
+                TaskCollection.Add(new TaskData
+                    {
+                        TaskId = plan.TaskId,
+                        TaskName = plan.TaskName,
+                        StartDate = plan.StartDate,
+                        EndDate = plan.EndDate
+                    });
+            }
+        }
+
+
+        var data1 = ApiService.GetAsync<IEnumerable<TaskData>>($"api/{ControllerNameManager.Instance.GetControllerName(nameof(WorkOrdersController))}/GanttTasks"); ;
+
+
+        if (data1 != null)
+        {
+            foreach (var wo in data1)
+            {
+                TaskCollection.Add(new TaskData
+                    {
+                        TaskId = wo.TaskId,
+                        TaskName = wo.TaskName,
+                        StartDate = wo.StartDate,
+                        Duration = wo.Duration,
+                        DurationUnit = wo.DurationUnit,
+                        Progress = wo.Progress,
+                        ParentId = wo.ParentId,
+                        Resources = wo.Resources
+                    });
+            }
+        }
+        return TaskCollection;
+    }
+}

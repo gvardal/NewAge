@@ -9,13 +9,13 @@ namespace Dupus.Repository.EFCore.Repositories
 {
     public class WorkOrderRepository : RepositoryBase<WorkOrder>, IWorkOrderRepository
     {
-      
+
 
         #region Constructor
 
         public WorkOrderRepository(RepositoryContext context) : base(context)
         {
-           
+
         }
 
         #endregion
@@ -125,9 +125,12 @@ namespace Dupus.Repository.EFCore.Repositories
                     progress = s.GerceklesenCikti == 0 ? 0 : Convert.ToDecimal(s.GerceklesenCikti / s.PlanlananGirdi),
                 }).AsNoTracking();
 
-            if (result is not null)
+            
+            var list = result.ToList().Where(x => (x.endDate - x.startDate).TotalHours > 24).ToList();
+
+            if (list != null && list.Count() != 0)
             {
-                foreach (var wo in result)
+                foreach (var wo in list)
                 {
                     weeklyPlan.Add(new WeeklyPlanDto
                     {

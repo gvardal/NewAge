@@ -1,6 +1,6 @@
 ﻿namespace Models.Entities.Dupus.Entity.Dtos
 {
-    public class WeeklyPlanDto
+    public class WeeklyPlanDto 
     {
         public int Id { get; set; }
         public string? Subject { get; set; }

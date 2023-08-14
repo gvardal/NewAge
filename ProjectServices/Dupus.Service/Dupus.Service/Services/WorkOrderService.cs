@@ -36,19 +36,19 @@ namespace Dupus.Service.Services
 
         public IEnumerable<WeeklyPlanDto> GetWeeklyPlanWorkOrders(string konumId) => _repositoryManager.WorkOrderRepository.WeeklyPlanWorkOrders(konumId);
 
-        public List<TaskData> GanttTasks()
+        public IEnumerable<TaskData> GanttTasks()
         {   
             var result = _repositoryManager.WorkOrderRepository.GanttTasks();
             return result;
         }
 
-        public List<TaskData> GanttProductPlan()
+        public IEnumerable<TaskData> GanttProductPlan()
         {
             var result = _repositoryManager.WorkOrderRepository.GanttProductPlan();
             return result;
         }
 
-        public List<GanttMainTaskDto> GanttMainTasks()
+        public IEnumerable<GanttMainTaskDto> GanttMainTasks()
         {
             var result = _repositoryManager.WorkOrderRepository.GanttMainTask();
             return result;

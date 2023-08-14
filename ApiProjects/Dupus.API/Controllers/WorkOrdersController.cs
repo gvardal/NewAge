@@ -21,10 +21,7 @@ namespace Dupus.API.Controllers
 
         #region Methods
 
-        /// <summary>
-        /// It represent all work order list 
-        /// </summary>
-        /// <returns></returns>
+
         [HttpGet]
         //[Route("WorkOrderList")]
         public IActionResult GetAllWorkOrder()
@@ -34,11 +31,7 @@ namespace Dupus.API.Controllers
             return CheckEntityResult(entity);
         }
 
-        /// <summary>
-        /// It represent getting work order by id
-        /// </summary>
-        /// <param name="workOrderId"></param>
-        /// <returns></returns>
+
         [HttpGet]
         [Route("WorkOrderListById/{id}")]
         public IActionResult? GetWorkOrderById(int id = 999999)
@@ -48,10 +41,7 @@ namespace Dupus.API.Controllers
 
         }
 
-        /// <summary>
-        /// It representing all work order status list
-        /// </summary>
-        /// <returns></returns>
+
         [HttpGet]
         [Route("WorkOrderStatusList")]
         public IActionResult GetAllWorkOrderStatus()
@@ -61,11 +51,6 @@ namespace Dupus.API.Controllers
 
         }
 
-        /// <summary>
-        /// It represent getting work order status by id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         [HttpGet]
         [Route("WorkOrderStatusById/{id}")]
         public IActionResult? GetWorkOrderStatusById([FromQuery] int id)
@@ -83,6 +68,29 @@ namespace Dupus.API.Controllers
             return CheckEntityResult(entity);
 
         }
+
+        [HttpGet]
+        [Route("GanttProductPlan")]
+        public IActionResult? GanttProductPlan()
+        {
+            var entity = _serviceManager.WorkOrderService.GanttProductPlan();
+            return CheckEntityResult(entity);
+
+        }
+
+        [HttpGet]
+        [Route("GanttTasks")]
+        public IActionResult GanttTasks()
+        {
+            var entity = _serviceManager.WorkOrderService.GanttTasks();
+            return CheckEntityResult(entity);
+
+        }
+
+
+      
+
+
 
 
         #endregion

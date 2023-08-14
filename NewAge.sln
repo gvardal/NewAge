@@ -55,9 +55,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dupus.Service", "ProjectSer
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiProjects", "ApiProjects", "{102B5D12-DC0E-4DEB-A9C9-61B04EEFF834}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dupus.API", "ApiProjects\Dupus.API\Dupus.API.csproj", "{D4FBE599-A362-42E4-ACA5-AEF3200F416F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dupus.API", "ApiProjects\Dupus.API\Dupus.API.csproj", "{D4FBE599-A362-42E4-ACA5-AEF3200F416F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dupus.UI", "UserInterfaces\Dupus\Blazor.Server.App\Dupus.UI.csproj", "{3C7EFB48-8F88-41AD-9E68-5C6C6FE221FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dupus.UI", "UserInterfaces\Dupus\Blazor.Server.App\Dupus.UI.csproj", "{3C7EFB48-8F88-41AD-9E68-5C6C6FE221FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

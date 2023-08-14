@@ -19,7 +19,7 @@ namespace Dupus.API.Controllers.BaseController
         public IActionResult CheckEntityResult<T>(IEnumerable<T> entity) where T : class
         {
             if (entity == null || entity.Count() == 0)
-                return NotFound();
+                return NoContent();
             return Ok(entity);
         }
 
