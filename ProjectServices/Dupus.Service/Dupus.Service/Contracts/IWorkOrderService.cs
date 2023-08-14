@@ -12,12 +12,12 @@ namespace ProjectServices.Dupus.Services.Contracts
 
         #region Gantt
 
-        List<TaskData> GanttTasks();
-        List<GanttMainTaskDto> GanttMainTasks();
+        IEnumerable<TaskData> GanttTasks();
+        IEnumerable<GanttMainTaskDto> GanttMainTasks();
         // For Blazor Project
         IEnumerable<WeeklyPlanDto> GetWeeklyPlanWorkOrders(string konumId);
-        List<TaskData> GanttProductPlan();
-        
+        IEnumerable<TaskData> GanttProductPlan();
+
         #endregion
     }
 }

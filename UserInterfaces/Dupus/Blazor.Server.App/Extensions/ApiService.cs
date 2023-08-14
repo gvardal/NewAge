@@ -1,7 +1,11 @@
-﻿using Dupus.Repository.Contracts.IRepositoryManagers;
+﻿using Dupus.API.Controllers;
+using Dupus.Repository.Contracts.IRepositoryManagers;
 using Dupus.Repository.EFCore.RepositoryManagers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.IdentityModel.Tokens;
+using Models.Entities.Dupus.Entity.Dtos;
 using System.Net.Http;
+using System.Text.Json;
 using static System.Net.WebRequestMethods;
 
 namespace Dupus.UI.Extensions
@@ -23,5 +27,15 @@ namespace Dupus.UI.Extensions
         }
 
         public static string GetHttpClient() { return HttpClient.BaseAddress.AbsoluteUri; }
+
+        public static T GetAsync<T>(string url) where T :class
+        {
+            var response = HttpClient.GetAsync(GetHttpClient() + url);
+            var content = response.Result.Content.ReadAsStringAsync();
+            if (content == null || content.Result == null || string.IsNullOrEmpty(content.Result))
+                return null;
+            var data = JsonSerializer.Deserialize<T>(content.Result, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            return data;
+        }
     }
 }

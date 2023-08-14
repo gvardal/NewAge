@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace Models.Entities.Dupus.Entity.Dtos
+﻿namespace Models.Entities.Dupus.Entity.Dtos
 {
     public class TaskData 
     {

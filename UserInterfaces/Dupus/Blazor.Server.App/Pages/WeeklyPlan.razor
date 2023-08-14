@@ -52,12 +52,11 @@
 
     protected override void OnInitialized()
     {
-        var response = http.GetAsync($"{ApiService.GetHttpClient()}api/{ControllerNameManager.Instance.GetControllerName(nameof(LocationController))}/GantResource/21");
-        var content = response.Result.Content.ReadAsStringAsync();
-        var data = JsonSerializer.Deserialize<IEnumerable<GanttResourceGroupDto>>(content.Result, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+      
+        var data = ApiService.GetAsync<IEnumerable<GanttResourceGroupDto>>($"api/{ControllerNameManager.Instance.GetControllerName(nameof(LocationController))}/GantResource/21");
 
         var resources = data;
-        if (response.IsCompletedSuccessfully && resources != null)
+        if (resources != null)
         {
             foreach (var resource in resources)
             {
@@ -75,13 +74,7 @@
         var Values = ListBoxObj.GetDataByValue(Value);
         if (Values != null && Values.Count != 0)
         {
-            SelectedResource = Values.First().Text!;
-
-            var response = http.GetAsync($"{ApiService.GetHttpClient()}api/{ControllerNameManager.Instance.GetControllerName(nameof(WorkOrdersController))}/WeeklyPlanWorkOrdersById/{SelectedResourceId!}");
-            var content = response.Result.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<IEnumerable<WeeklyPlanDto>>(content.Result, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-            //var result = http.GetFromJsonAsync<> _manager.IsEmriService.GetWeeklyPlanWorkOrders(SelectedResourceId!);
+            SelectedResource = Values.First().Text!;          
         }
 
     }
@@ -91,9 +84,8 @@
         if (args.Value != null)
         {
             SelectedResourceId = args.Value.First();
-            var response = http.GetAsync($"{ApiService.GetHttpClient()}api/{ControllerNameManager.Instance.GetControllerName(nameof(WorkOrdersController))}/WeeklyPlanWorkOrdersById/{SelectedResourceId}");
-            var content = response.Result.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<IEnumerable<WeeklyPlanDto>>(content.Result, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            var result = ApiService.GetAsync<IEnumerable<WeeklyPlanDto>>($"api/{ControllerNameManager.Instance.GetControllerName(nameof(WorkOrdersController))}/WeeklyPlanWorkOrdersById/{SelectedResourceId}");
             if (result != null && result.Count() != 0)
                 DataSource = result.ToList();
         }
@@ -107,15 +99,9 @@
             {
                 foreach (var cwo in args.ChangedRecords)
                 {
+                   
+                    var result = ApiService.GetAsync<WorkOrderRoute>($"api/{ControllerNameManager.Instance.GetControllerName(nameof(WorkOrderRouteController))}/WorkOrderRouteById/{cwo.Id}");
 
-                    var response = http.GetAsync($"{ApiService.GetHttpClient()}api/{ControllerNameManager.Instance.GetControllerName(nameof(WorkOrderRouteController))}/WorkOrderRouteById/{cwo.Id}");
-
-                    var content = response.Result.Content.ReadAsStringAsync();
-                    var result = JsonSerializer.Deserialize<IEnumerable<WorkOrderRoute>>(content.Result, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }).FirstOrDefault();
-
-
-
-                    //WorkOrderRoute? rotaBilgisi = _manager.IsEmriRotaService.GetIsEmriRotaById(cwo.Id, true).FirstOrDefault();
                     if (result != null)
                     {
                         TimeSpan ts = cwo.EndTime - cwo.StartTime;
@@ -130,8 +116,6 @@
                         Console.ForegroundColor = ConsoleColor.Red;
 
                         var upd = http.PutAsJsonAsync<WorkOrderRoute>($"{ApiService.GetHttpClient()}api/{ControllerNameManager.Instance.GetControllerName(nameof(WorkOrderRouteController))}", result).Result;
-
-                        //Console.WriteLine(_manager.IsEmriRotaService.updateIsEmriRotasi(rotaBilgisi));
                         Console.WriteLine(upd);
                         Console.ResetColor();
                     }
