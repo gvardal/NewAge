@@ -69,17 +69,17 @@ namespace Dupus.Service.Services
                         if (i == 0)
                         {
                             wordDto.StartTime = item.StartTime;
-                            wordDto.EndTime = startDate.AddDays(1).AddMinutes(-1);
+                            wordDto.EndTime = startDate.AddDays(1).AddHours(-6);
                         }
                         else if (i == endDate.Day - startDate.Day)
                         {
-                            wordDto.StartTime = endDate;
+                            wordDto.StartTime = endDate.AddHours(8);
                             wordDto.EndTime = item.EndTime;
                         }
                         else
                         {
-                            wordDto.StartTime = startDate.AddDays(i);
-                            wordDto.EndTime = startDate.AddDays(i).AddDays(1).AddMinutes(-1);
+                            wordDto.StartTime = startDate.AddDays(i).AddHours(8);
+                            wordDto.EndTime = startDate.AddDays(i).AddDays(1).AddHours(-6);
                         }
 
                         list.Add(wordDto);
