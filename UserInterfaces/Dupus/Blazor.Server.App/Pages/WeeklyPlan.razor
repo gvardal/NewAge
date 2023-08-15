@@ -52,7 +52,7 @@
 
     protected override void OnInitialized()
     {
-      
+
         var data = ApiService.GetAsync<IEnumerable<GanttResourceGroupDto>>($"api/{ControllerNameManager.Instance.GetControllerName(nameof(LocationController))}/GantResource/21");
 
         var resources = data;
@@ -74,7 +74,7 @@
         var Values = ListBoxObj.GetDataByValue(Value);
         if (Values != null && Values.Count != 0)
         {
-            SelectedResource = Values.First().Text!;          
+            SelectedResource = Values.First().Text!;
         }
 
     }
@@ -88,6 +88,8 @@
             var result = ApiService.GetAsync<IEnumerable<WeeklyPlanDto>>($"api/{ControllerNameManager.Instance.GetControllerName(nameof(WorkOrdersController))}/WeeklyPlanWorkOrdersById/{SelectedResourceId}");
             if (result != null && result.Count() != 0)
                 DataSource = result.ToList();
+            else
+                DataSource = new List<WeeklyPlanDto>();
         }
     }
 
@@ -99,9 +101,9 @@
             {
                 foreach (var cwo in args.ChangedRecords)
                 {
-                   
-                    var result = ApiService.GetAsync<WorkOrderRoute>($"api/{ControllerNameManager.Instance.GetControllerName(nameof(WorkOrderRouteController))}/WorkOrderRouteById/{cwo.Id}");
 
+                    var resultList = ApiService.GetAsync<List<WorkOrderRoute>>($"api/{ControllerNameManager.Instance.GetControllerName(nameof(WorkOrderRouteController))}/WorkOrderRouteById/{cwo.Id}");
+                    var result = resultList[0];
                     if (result != null)
                     {
                         TimeSpan ts = cwo.EndTime - cwo.StartTime;

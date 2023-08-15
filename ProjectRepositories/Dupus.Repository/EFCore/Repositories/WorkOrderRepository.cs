@@ -125,12 +125,10 @@ namespace Dupus.Repository.EFCore.Repositories
                     progress = s.GerceklesenCikti == 0 ? 0 : Convert.ToDecimal(s.GerceklesenCikti / s.PlanlananGirdi),
                 }).AsNoTracking();
 
-            
-            var list = result.ToList().Where(x => (x.endDate - x.startDate).TotalHours > 24).ToList();
-
-            if (list != null && list.Count() != 0)
+           
+            if (result != null && result.Count() != 0)
             {
-                foreach (var wo in list)
+                foreach (var wo in result)
                 {
                     weeklyPlan.Add(new WeeklyPlanDto
                     {

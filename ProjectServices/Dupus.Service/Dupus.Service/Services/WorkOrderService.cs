@@ -34,10 +34,73 @@ namespace Dupus.Service.Services
 
         #region Gantt
 
-        public IEnumerable<WeeklyPlanDto> GetWeeklyPlanWorkOrders(string konumId) => _repositoryManager.WorkOrderRepository.WeeklyPlanWorkOrders(konumId);
+        public IEnumerable<WeeklyPlanDto> GetWeeklyPlanWorkOrders(string konumId)
+        {
+            var result = _repositoryManager.WorkOrderRepository.WeeklyPlanWorkOrders(konumId);
 
+            List<WeeklyPlanDto> list = new();
+            foreach (var item in result)
+            {
+              
+                var endDate = DateTime.Parse(item.EndTime.ToString("dd.MM.yyyy"));
+                var startDate = DateTime.Parse(item.StartTime.ToString("dd.MM.yyyy"));
+
+                double rslt = item.EndTime.Subtract(item.StartTime).TotalDays;
+                if (endDate != startDate && (rslt > 0 || endDate.Day != startDate.Day))
+                {
+                    var count = (endDate.Day - startDate.Day);
+                    for (int i = 0; i < (endDate.Day - startDate.Day) + 1; i++)
+                    {
+                        WeeklyPlanDto wordDto = new WeeklyPlanDto
+                        {
+                            Id = item.Id,
+                            StartTime = item.StartTime,
+                            EndTime = item.EndTime,
+                            Description = item.Description,
+                            IsAllDay = item.IsAllDay,
+                            Location = item.Location,
+                            RecurrenceException = item.RecurrenceException,
+                            RecurrenceID = item.RecurrenceID,
+                            RecurrenceRule = item.RecurrenceRule,
+                            Subject = item.Subject
+                            
+                        };
+
+                        if (i == 0)
+                        {
+                            wordDto.StartTime = item.StartTime;
+                            wordDto.EndTime = startDate.AddDays(1).AddMinutes(-1);
+                        }
+                        else if (i == endDate.Day - startDate.Day)
+                        {
+                            wordDto.StartTime = endDate;
+                            wordDto.EndTime = item.EndTime;
+                        }
+                        else
+                        {
+                            wordDto.StartTime = startDate.AddDays(i);
+                            wordDto.EndTime = startDate.AddDays(i).AddDays(1).AddMinutes(-1);
+                        }
+
+                        list.Add(wordDto);
+                    }
+                }
+                else if (endDate == startDate
+                                   && item.EndTime.TimeOfDay.TotalMilliseconds != item.StartTime.TimeOfDay.TotalMilliseconds
+                                   && item.EndTime.TimeOfDay.TotalMilliseconds > item.StartTime.TimeOfDay.TotalMilliseconds)
+                {
+                    list.Add(item);
+                }
+
+            }
+
+            return list;
+            //var temp = result.ToList().Where(x => (DateTime.Parse(x.EndTime.ToString("dd.MM.yyyy")) == (DateTime.Parse(x.StartTime.ToString("dd.MM.yyyy")))) || ).ToList();
+            //return result.ToList().Where(x => (DateTime.Parse(x.EndTime.ToString("dd.MM.yyy")) != (DateTime.Parse(x.StartTime.ToString("dd.MM.yyyy"))))).ToList();
+
+        }
         public IEnumerable<TaskData> GanttTasks()
-        {   
+        {
             var result = _repositoryManager.WorkOrderRepository.GanttTasks();
             return result;
         }
